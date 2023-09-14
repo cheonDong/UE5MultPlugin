@@ -66,6 +66,33 @@ void AUE5MultPluginCharacter::BeginPlay()
 	}
 }
 
+void AUE5MultPluginCharacter::EventGetItem_Implementation(EItemType itemType)
+{
+	switch (itemType)
+	{
+		case EItemType::IT_RecoveryHp:
+		{
+			UE_LOG(LogTemp, Warning, TEXT("IT_RecoveryHp"));
+			break;
+		}
+		case EItemType::IT_RecoveryMp:
+		{
+			UE_LOG(LogTemp, Warning, TEXT("IT_RecoveryMp"));
+			break;
+		}
+		case EItemType::IT_SpeedUp:
+		{
+			UE_LOG(LogTemp, Warning, TEXT("IT_SpeedUp"));
+			break;
+		}
+		case EItemType::IT_PowerUp:
+		{
+			UE_LOG(LogTemp, Warning, TEXT("IT_PowerUp"));
+			break;
+		}
+	}
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 

@@ -5,11 +5,13 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InputActionValue.h"
+#include "ItemInterface.h"
 #include "UE5MultPluginCharacter.generated.h"
 
+enum class EItemType : uint8;
 
 UCLASS(config=Game)
-class AUE5MultPluginCharacter : public ACharacter
+class AUE5MultPluginCharacter : public ACharacter, public IItemInterface
 {
 	GENERATED_BODY()
 
@@ -62,5 +64,11 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+public:
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void EventGetItem(EItemType itemType);
+
+	void EventGetItem_Implementation(EItemType itemType) override;
 };
 

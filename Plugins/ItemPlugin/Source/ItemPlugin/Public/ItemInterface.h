@@ -6,7 +6,16 @@
 #include "UObject/Interface.h"
 #include "ItemInterface.generated.h"
 
-// This class does not need to be modified.
+UENUM()
+enum class EItemType : uint8
+{
+	IT_RecoveryHp UMETA(DisplayName = "RecoveryHp"),
+	IT_RecoveryMp UMETA(DisplayName = "RecoveryMp"),
+	IT_SpeedUp UMETA(DisplayName = "SpeedUp"),
+	IT_PowerUp UMETA(DisplayName = "PowerUp"),
+};
+
+
 UINTERFACE(MinimalAPI)
 class UItemInterface : public UInterface
 {
@@ -22,4 +31,7 @@ class ITEMPLUGIN_API IItemInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Event")
+	void EventGetItem(EItemType itemType);
+
 };
