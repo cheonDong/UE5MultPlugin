@@ -39,6 +39,8 @@ class AUE5MultPluginCharacter : public ACharacter, public IItemInterface
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+	
+
 public:
 	AUE5MultPluginCharacter();
 	
@@ -70,5 +72,8 @@ public:
 	void EventGetItem(EItemType itemType);
 
 	void EventGetItem_Implementation(EItemType itemType) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+	class UStatManagementComponent* StatManager;
 };
 

@@ -40,6 +40,11 @@ void AItemBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	this->AddActorLocalRotation(FRotator(
+		0,
+		400.0 * DeltaTime,
+		0));
+
 }
 
 void AItemBase::MeshBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "StatManagementComponent.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -49,6 +50,8 @@ AUE5MultPluginCharacter::AUE5MultPluginCharacter()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	StatManager = CreateDefaultSubobject<UStatManagementComponent>(TEXT("StatManager"));
 }
 
 void AUE5MultPluginCharacter::BeginPlay()
@@ -68,26 +71,35 @@ void AUE5MultPluginCharacter::BeginPlay()
 
 void AUE5MultPluginCharacter::EventGetItem_Implementation(EItemType itemType)
 {
+	if (IsValid(StatManager) == false)
+	{
+		return;
+	}
+	
 	switch (itemType)
 	{
 		case EItemType::IT_RecoveryHp:
 		{
 			UE_LOG(LogTemp, Warning, TEXT("IT_RecoveryHp"));
+			StatManager->RecurberyHp();
 			break;
 		}
 		case EItemType::IT_RecoveryMp:
 		{
 			UE_LOG(LogTemp, Warning, TEXT("IT_RecoveryMp"));
+			StatManager->RecurberyMp();
 			break;
 		}
 		case EItemType::IT_SpeedUp:
 		{
 			UE_LOG(LogTemp, Warning, TEXT("IT_SpeedUp"));
+			StatManager->BurfSpeed();
 			break;
 		}
 		case EItemType::IT_PowerUp:
 		{
 			UE_LOG(LogTemp, Warning, TEXT("IT_PowerUp"));
+			StatManager->BurfPower();
 			break;
 		}
 	}
