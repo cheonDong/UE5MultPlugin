@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "StatManagementComponent.h"
+#include "MonsterStatComponent.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -52,6 +53,8 @@ AUE5MultPluginCharacter::AUE5MultPluginCharacter()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
 	StatManager = CreateDefaultSubobject<UStatManagementComponent>(TEXT("StatManager"));
+
+	MonsterStat = CreateDefaultSubobject<UMonsterStatComponent>(TEXT("MonsterStat"));
 }
 
 void AUE5MultPluginCharacter::BeginPlay()
@@ -103,6 +106,22 @@ void AUE5MultPluginCharacter::EventGetItem_Implementation(EItemType itemType)
 			break;
 		}
 	}
+}
+
+float AUE5MultPluginCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	UMonsterStatComponent* monsterPS = Cast<UMonsterStatComponent>(this->FindComponentByClass<UMonsterStatComponent>());
+	
+	if (monsterPS == nullptr)
+	{
+		return 0.0f;
+	}
+	
+	monsterPS->Hp -= DamageAmount;
+
+	UE_LOG(LogTemp, Warning, TEXT("%f"), monsterPS->Hp);
+
+	return 0.0f;
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -3,33 +3,33 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "PassiveSkillBase.h"
-#include "PassiveSkillDefenseArea.generated.h"
+#include "ActiveSkillBase.h"
+#include "ActiveSkillLightning.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SKILLPLUGIN_API APassiveSkillDefenseArea : public APassiveSkillBase
+class SKILLPLUGIN_API AActiveSkillLightning : public AActiveSkillBase
 {
 	GENERATED_BODY()
 
 public:
-	APassiveSkillDefenseArea();
+	AActiveSkillLightning();
 	
 protected:
+	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
+	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor) override;
 
-	void ApplySkillDamage();
-
 	virtual void SkillLevelUp() override;
 
-	FTimerHandle Th_ProcessBeginOverlap;
-
 	AActor* Target;
+
+	void ApplySkillDamage();
 };

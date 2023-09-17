@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ActiveSkillStorm.h"
+#include "ActiveSkillLightning.h"
 #include "Components/BoxComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -10,15 +10,16 @@
 #include "Engine/Texture2D.h"
 #include "MonsterStatComponent.h"
 
-AActiveSkillStorm::AActiveSkillStorm()
+
+AActiveSkillLightning::AActiveSkillLightning()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
 	SkillArea = CreateDefaultSubobject<UBoxComponent>(TEXT("Box"));
 	RootComponent = SkillArea;
-	PartX = 100;
-	PartY = 100;
-	PartZ = 200;
+	PartX = 150;
+	PartY = 150;
+	PartZ = 150;
 	SkillArea->SetBoxExtent(FVector(PartX, PartY, PartZ));
 	SkillArea->SetGenerateOverlapEvents(true);
 	SkillArea->SetCollisionProfileName("OverlapAllDynamic");
@@ -27,14 +28,20 @@ AActiveSkillStorm::AActiveSkillStorm()
 	SkillBody->SetupAttachment(SkillArea);
 	SkillSize = 0.5;
 	SkillBody->SetRelativeScale3D(FVector(SkillSize, SkillSize, SkillSize));
-	SkillBody->SetRelativeLocation(FVector(0.0f, 0.0f, -200.0f));
+	SkillBody->SetRelativeLocation(FVector(0.0f, 0.0f, -100.0f));
+
+	static ConstructorHelpers::FObjectFinder<UParticleSystemComponent> ParticleAsset(TEXT("/Game/FXVarietyPack/Particles/P_ky_lightning3.P_ky_lightning3"));
+	if (ParticleAsset.Succeeded())
+	{
+		SkillBody = ParticleAsset.Object;
+	}
 
 	SkillMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("SkillMovement"));
 	SkillMovement->SetUpdatedComponent(SkillArea);
 
 	SkillMovement->ProjectileGravityScale = 0;
-	SkillMovement->InitialSpeed = 300.0f;
-	SkillMovement->MaxSpeed = 300.0f;
+	SkillMovement->InitialSpeed = 500.0f;
+	SkillMovement->MaxSpeed = 500.0f;
 
 	Damage = 30.0f;
 
@@ -43,23 +50,30 @@ AActiveSkillStorm::AActiveSkillStorm()
 	Cooldown = 10.0f;
 
 	SkillThumbnail = CreateDefaultSubobject<UTexture2D>(TEXT("SKillTumbnail"));
+
+
+	static ConstructorHelpers::FObjectFinder<UTexture2D> Thumbnail(TEXT("/Game/CraftResourcesIcons/Textures/Tex_feather_01.Tex_feather_01"));
+	if (Thumbnail.Succeeded())
+	{
+		SkillThumbnail = Thumbnail.Object;
+	}
 }
 
-void AActiveSkillStorm::BeginPlay()
+void AActiveSkillLightning::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OnActorBeginOverlap.AddDynamic(this, &AActiveSkillStorm::ProcessBeginOverlap);
+	OnActorBeginOverlap.AddDynamic(this, &AActiveSkillLightning::ProcessBeginOverlap);
 
-	// SetLifeSpan(10.0f);
+	SetLifeSpan(2.0f);
 }
 
-void AActiveSkillStorm::Tick(float DeltaTime)
+void AActiveSkillLightning::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
 
-void AActiveSkillStorm::ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
+void AActiveSkillLightning::ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor)
 {
 	if (HasAuthority() == false)
 		return;
@@ -80,7 +94,7 @@ void AActiveSkillStorm::ProcessBeginOverlap(AActor* OverlappedActor, AActor* Oth
 	SkillLevelUp();
 }
 
-void AActiveSkillStorm::SkillLevelUp()
+void AActiveSkillLightning::SkillLevelUp()
 {
 	Level += 1;
 	Damage += 30.0f;
@@ -90,15 +104,10 @@ void AActiveSkillStorm::SkillLevelUp()
 	SkillSize += 0.5;
 	SkillArea->SetBoxExtent(FVector(PartX, PartY, PartZ));
 	SkillBody->SetRelativeScale3D(FVector(SkillSize, SkillSize, SkillSize));
-
 }
 
-void AActiveSkillStorm::ApplySkillDamage()
+void AActiveSkillLightning::ApplySkillDamage()
 {
 	UGameplayStatics::ApplyDamage(Target, Damage, GetWorld()->GetFirstPlayerController(), nullptr, UDamageType::StaticClass());
 	UE_LOG(LogClass, Warning, TEXT("ApplyDamage"));
-
-	// 틱데미지 구현
-	FTimerManager& timerManager = GetWorld()->GetTimerManager();
-	timerManager.SetTimer(Th_ProcessBeginOverlap, this, &AActiveSkillStorm::ApplySkillDamage, 0.5f, false);
 }

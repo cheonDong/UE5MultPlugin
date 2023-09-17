@@ -9,7 +9,7 @@ public class UE5MultPlugin : ModuleRules
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "HeadMountedDisplay", "EnhancedInput", 
-			"UMG", "ItemPlugin", "OnlineSubsystem", "OnlineSubsystemUtils" });
+			"UMG", "ItemPlugin", "SkillPlugin" ,"OnlineSubsystem", "OnlineSubsystemUtils" });
 
         DynamicallyLoadedModuleNames.Add("OnlineSubsystemNull");
     }
