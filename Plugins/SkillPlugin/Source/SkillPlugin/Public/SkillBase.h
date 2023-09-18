@@ -60,4 +60,6 @@ public:
 
 	UFUNCTION()
 	virtual void SkillLevelUp();
+
+	
 };

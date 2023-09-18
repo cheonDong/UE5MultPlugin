@@ -32,9 +32,9 @@ AActiveSkillStorm::AActiveSkillStorm()
 	SkillMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("SkillMovement"));
 	SkillMovement->SetUpdatedComponent(SkillArea);
 
-	SkillMovement->ProjectileGravityScale = 0;
+	/*SkillMovement->ProjectileGravityScale = 0;
 	SkillMovement->InitialSpeed = 300.0f;
-	SkillMovement->MaxSpeed = 300.0f;
+	SkillMovement->MaxSpeed = 300.0f;*/
 
 	Damage = 30.0f;
 
@@ -50,6 +50,7 @@ void AActiveSkillStorm::BeginPlay()
 	Super::BeginPlay();
 
 	OnActorBeginOverlap.AddDynamic(this, &AActiveSkillStorm::ProcessBeginOverlap);
+	OnActorEndOverlap.AddDynamic(this, &AActiveSkillStorm::EndOverlap);
 
 	// SetLifeSpan(10.0f);
 }
@@ -101,4 +102,10 @@ void AActiveSkillStorm::ApplySkillDamage()
 	// 틱데미지 구현
 	FTimerManager& timerManager = GetWorld()->GetTimerManager();
 	timerManager.SetTimer(Th_ProcessBeginOverlap, this, &AActiveSkillStorm::ApplySkillDamage, 0.5f, false);
+}
+
+void AActiveSkillStorm::EndOverlap(AActor* OverlappedActor, AActor* OtherActor)
+{
+	FTimerManager& timerManager = GetWorld()->GetTimerManager();
+	timerManager.ClearTimer(Th_ProcessBeginOverlap);
 }

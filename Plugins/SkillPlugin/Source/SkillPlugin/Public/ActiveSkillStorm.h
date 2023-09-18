@@ -34,5 +34,8 @@ public:
 	AActor* Target;
 
 	void ApplySkillDamage();
+
+	UFUNCTION()
+	virtual void EndOverlap(AActor* OverlappedActor, AActor* OtherActor);
 	
 };
