@@ -32,15 +32,19 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UTexture2D* SkillIcon;
 
-	//UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Custom)
-	//class FButtonClick* OnClickContinue;
+	/*FString Name;
 
-	//UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Custom)
-	//class FButtonClick* OnClickExit;
+	int CostV;
+
+	FString Description;*/
+
 
 public:
 	UFUNCTION()
 	void SetSkillOnButton();
+
+	UFUNCTION()
+	void BindSkill(ASkillBase* SkillData);
 
 	UFUNCTION()
 	void AddSkillToInventory();

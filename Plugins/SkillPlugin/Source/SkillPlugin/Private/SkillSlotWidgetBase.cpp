@@ -5,6 +5,7 @@
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
 #include "Engine/Texture2D.h"
+#include "SkillManagementComponent.h"
 
 void USkillSlotWidgetBase::NativeConstruct()
 {
@@ -16,7 +17,7 @@ void USkillSlotWidgetBase::NativeConstruct()
 	if (SKillButton)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SKillButton"));
-		SKillButton->OnClicked.AddDynamic(this, &USkillSlotWidgetBase::AddSkillToInventory);
+		SKillButton->OnClicked.AddDynamic(this, &USkillSlotWidgetBase::SetSkillOnButton);
 	}
 
 	SkillName = Cast<UTextBlock>(GetWidgetFromName(TEXT("SkillNameT")));
@@ -42,13 +43,27 @@ void USkillSlotWidgetBase::NativeConstruct()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SkillIcon"));
 	}
-
-	SetSkillOnButton();
 }
 
 void USkillSlotWidgetBase::SetSkillOnButton()
 {
-	// 스킬 구조체를 가져와서 랜덤으로 스킬 배치
+	/*USkillManagementComponent* SM = Cast<USkillManagementComponent>(GetWorld()->GetFirstPlayerController());
+
+	if (IsValid(SM) == false)
+	{
+		return;
+	}
+
+	TArray<ASkillBase*> SkillDatas = SM->GetSkillDatas();
+
+	ASkillBase* randSkill = SkillDatas[FMath::RandRange(0, SkillDatas.Num() - 1)];
+
+	BindSkill(randSkill);*/
+}
+
+void USkillSlotWidgetBase::BindSkill(ASkillBase* SkillData)
+{
+
 }
 
 void USkillSlotWidgetBase::AddSkillToInventory()

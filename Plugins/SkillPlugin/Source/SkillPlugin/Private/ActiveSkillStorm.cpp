@@ -43,6 +43,10 @@ AActiveSkillStorm::AActiveSkillStorm()
 	Cooldown = 10.0f;
 
 	SkillThumbnail = CreateDefaultSubobject<UTexture2D>(TEXT("SKillTumbnail"));
+
+	SkillName = "Fire Storm";
+
+	SkillDescription = "전방에 화염 소용돌이를 소환해 적들에게 지속적인 데미지를 준다.";
 }
 
 void AActiveSkillStorm::BeginPlay()

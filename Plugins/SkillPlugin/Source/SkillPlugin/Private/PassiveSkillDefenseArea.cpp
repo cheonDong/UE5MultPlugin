@@ -34,6 +34,10 @@ APassiveSkillDefenseArea::APassiveSkillDefenseArea()
 	Price = 50;
 
 	SkillThumbnail = CreateDefaultSubobject<UTexture2D>(TEXT("SKillTumbnail"));
+
+	SkillName = "Defense Area";
+
+	SkillDescription = "플레이어를 중심으로 생성되며, 범위 안에 들어오는 적에게 지속적인 데미지를 준다.";
 }
 
 void APassiveSkillDefenseArea::BeginPlay()

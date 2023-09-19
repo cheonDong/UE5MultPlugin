@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "StatManagementComponent.h"
 #include "MonsterStatComponent.h"
+#include "SkillManagementComponent.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -55,6 +56,8 @@ AUE5MultPluginCharacter::AUE5MultPluginCharacter()
 	StatManager = CreateDefaultSubobject<UStatManagementComponent>(TEXT("StatManager"));
 
 	MonsterStat = CreateDefaultSubobject<UMonsterStatComponent>(TEXT("MonsterStat"));
+
+	SkillManager = CreateDefaultSubobject<USkillManagementComponent>(TEXT("SkillManager"));
 }
 
 void AUE5MultPluginCharacter::BeginPlay()

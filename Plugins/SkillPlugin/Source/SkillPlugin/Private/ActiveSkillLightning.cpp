@@ -51,6 +51,10 @@ AActiveSkillLightning::AActiveSkillLightning()
 
 	SkillThumbnail = CreateDefaultSubobject<UTexture2D>(TEXT("SKillTumbnail"));
 
+	SkillName = "Lightning";
+
+	SkillDescription = "전방에 낙뢰를 떨어뜨려 넓은 범위의 적에게 데미지를 준다.";
+
 
 	static ConstructorHelpers::FObjectFinder<UTexture2D> Thumbnail(TEXT("/Game/CraftResourcesIcons/Textures/Tex_feather_01.Tex_feather_01"));
 	if (Thumbnail.Succeeded())

@@ -43,6 +43,10 @@ AActiveSkillWaterBall::AActiveSkillWaterBall()
 	Cooldown = 10.0f;
 
 	SkillThumbnail = CreateDefaultSubobject<UTexture2D>(TEXT("SKillTumbnail"));
+
+	SkillName = "Water Ball";
+
+	SkillDescription = "전방으로 구 형태의 물을 날려 맡은 대상에게 큰 데미지를 준다.";
 }
 
 void AActiveSkillWaterBall::BeginPlay()

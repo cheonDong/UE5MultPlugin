@@ -27,8 +27,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Data")
 	TArray<class ASkillBase*> PlayerSkills;
 
+	UFUNCTION()
+	ASkillBase* GetRandomSkill();
+
 	UFUNCTION(BlueprintCallable, Category = "Data")
 	void GetSkill(ASkillBase* Skill);
 
 	bool IsCanUse(ASkillBase* Skill);
+
 };

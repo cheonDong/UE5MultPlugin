@@ -54,6 +54,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data")
 	double SkillSize;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data")
+	FString SkillName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Data")
+	FString SkillDescription;
+
 public:
 	UFUNCTION()
 	virtual void ProcessBeginOverlap(AActor* OverlappedActor, AActor* OtherActor);
