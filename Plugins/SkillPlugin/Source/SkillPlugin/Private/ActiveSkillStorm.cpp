@@ -10,6 +10,7 @@
 #include "Engine/Texture2D.h"
 #include "MonsterStatComponent.h"
 
+
 AActiveSkillStorm::AActiveSkillStorm()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -32,9 +33,9 @@ AActiveSkillStorm::AActiveSkillStorm()
 	SkillMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("SkillMovement"));
 	SkillMovement->SetUpdatedComponent(SkillArea);
 
-	/*SkillMovement->ProjectileGravityScale = 0;
+	SkillMovement->ProjectileGravityScale = 0;
 	SkillMovement->InitialSpeed = 300.0f;
-	SkillMovement->MaxSpeed = 300.0f;*/
+	SkillMovement->MaxSpeed = 300.0f;
 
 	Damage = 30.0f;
 
@@ -47,11 +48,15 @@ AActiveSkillStorm::AActiveSkillStorm()
 	SkillName = "Fire Storm";
 
 	SkillDescription = "전방에 화염 소용돌이를 소환해 적들에게 지속적인 데미지를 준다.";
+
+	
 }
 
 void AActiveSkillStorm::BeginPlay()
 {
 	Super::BeginPlay();
+
+	
 
 	OnActorBeginOverlap.AddDynamic(this, &AActiveSkillStorm::ProcessBeginOverlap);
 	OnActorEndOverlap.AddDynamic(this, &AActiveSkillStorm::EndOverlap);

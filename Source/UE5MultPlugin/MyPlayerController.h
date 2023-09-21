@@ -19,10 +19,9 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
-public:
+	AMyPlayerController();
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TArray<class ASkillBase*> SkillDatas;
+public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class UUserWidget> SkillShopWidgetClass;
@@ -32,4 +31,13 @@ public:
 
 	UFUNCTION()
 	void CreateSkillShopWidget();
+
+	UFUNCTION()
+	void BindSkillSData();
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnUpdateSkills(const TArray<class ASkillBase*>& SkillDatas);
+
+	void OnUpdateSkills_Implementation(const TArray<class ASkillBase*>& SkillDatas);
+
 };

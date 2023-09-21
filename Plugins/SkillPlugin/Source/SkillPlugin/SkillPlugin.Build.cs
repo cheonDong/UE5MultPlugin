@@ -34,7 +34,7 @@ public class SkillPlugin : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"CoreUObject",
+                "CoreUObject",
 				"Engine",
 				"UMG",
 				"Slate",

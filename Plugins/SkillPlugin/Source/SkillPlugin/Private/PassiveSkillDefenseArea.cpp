@@ -11,6 +11,7 @@
 
 
 
+
 APassiveSkillDefenseArea::APassiveSkillDefenseArea()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -38,12 +39,16 @@ APassiveSkillDefenseArea::APassiveSkillDefenseArea()
 	SkillName = "Defense Area";
 
 	SkillDescription = "플레이어를 중심으로 생성되며, 범위 안에 들어오는 적에게 지속적인 데미지를 준다.";
+
+	
 }
 
 void APassiveSkillDefenseArea::BeginPlay()
 {
 	Super::BeginPlay();
 	
+
+
 	OnActorBeginOverlap.AddDynamic(this, &APassiveSkillDefenseArea::ProcessBeginOverlap);
 }
 

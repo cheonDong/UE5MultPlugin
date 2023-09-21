@@ -9,6 +9,8 @@
 #include "Net/UnrealNetwork.h"
 #include "Engine/Texture2D.h"
 #include "MonsterStatComponent.h"
+#include "SkillManagementComponent.h"
+
 
 
 AActiveSkillLightning::AActiveSkillLightning()
@@ -61,11 +63,21 @@ AActiveSkillLightning::AActiveSkillLightning()
 	{
 		SkillThumbnail = Thumbnail.Object;
 	}
+
+	USkillManagementComponent* skillManager = Cast<USkillManagementComponent>(FindComponentByClass<USkillManagementComponent>());
+
+	if (skillManager)
+	{
+		UE_LOG(LogClass, Warning, TEXT("skillManager"));
+		skillManager->AddSkillDataToArr(this);
+	}
 }
 
 void AActiveSkillLightning::BeginPlay()
 {
 	Super::BeginPlay();
+
+	
 
 	OnActorBeginOverlap.AddDynamic(this, &AActiveSkillLightning::ProcessBeginOverlap);
 

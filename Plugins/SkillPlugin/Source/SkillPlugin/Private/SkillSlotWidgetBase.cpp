@@ -47,18 +47,14 @@ void USkillSlotWidgetBase::NativeConstruct()
 
 void USkillSlotWidgetBase::SetSkillOnButton()
 {
-	/*USkillManagementComponent* SM = Cast<USkillManagementComponent>(GetWorld()->GetFirstPlayerController());
+	USkillManagementComponent* SM = Cast<USkillManagementComponent>(GetWorld()->GetFirstPlayerController());
 
 	if (IsValid(SM) == false)
 	{
 		return;
 	}
 
-	TArray<ASkillBase*> SkillDatas = SM->GetSkillDatas();
-
-	ASkillBase* randSkill = SkillDatas[FMath::RandRange(0, SkillDatas.Num() - 1)];
-
-	BindSkill(randSkill);*/
+	//BindSkill(SM->GetRandomSkills());
 }
 
 void USkillSlotWidgetBase::BindSkill(ASkillBase* SkillData)

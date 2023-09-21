@@ -56,3 +56,7 @@ void USkillShopWidgetBase::NativeConstruct()
 	}
 }
 
+void USkillShopWidgetBase::UpdateSkillSlotList()
+{
+}
+

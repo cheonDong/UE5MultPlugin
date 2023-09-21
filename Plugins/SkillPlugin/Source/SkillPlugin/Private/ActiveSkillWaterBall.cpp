@@ -10,6 +10,7 @@
 #include "Engine/Texture2D.h"
 #include "MonsterStatComponent.h"
 
+
 AActiveSkillWaterBall::AActiveSkillWaterBall()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -47,13 +48,15 @@ AActiveSkillWaterBall::AActiveSkillWaterBall()
 	SkillName = "Water Ball";
 
 	SkillDescription = "전방으로 구 형태의 물을 날려 맡은 대상에게 큰 데미지를 준다.";
+
+	
 }
 
 void AActiveSkillWaterBall::BeginPlay()
 {
 	Super::BeginPlay();
 
-	OnActorBeginOverlap.AddDynamic(this, &AActiveSkillWaterBall::ProcessBeginOverlap);
+	
 }
 
 void AActiveSkillWaterBall::Tick(float DeltaTime)
