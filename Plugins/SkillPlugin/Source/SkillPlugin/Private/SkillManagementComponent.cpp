@@ -27,25 +27,7 @@ void USkillManagementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	/*PlayerSkills[0] = NewObject<AActiveSkillLightning>(this, TEXT("Lightning"));
-	PlayerSkills[1] = NewObject<AActiveSkillStorm>(this, TEXT("Storm"));
-	PlayerSkills[2] = NewObject<AActiveSkillWaterBall>(this, TEXT("WarterBall"));
-	PlayerSkills[3] = NewObject<APassiveSkillDefenseArea>(this, TEXT("DefenseArea"));*/
-
-	AActiveSkillLightning* NewActor = NewObject<AActiveSkillLightning>(GetTransientPackage(), AActiveSkillLightning::StaticClass());
-	AActiveSkillStorm* NewActor2 = NewObject<AActiveSkillStorm>(GetTransientPackage(), AActiveSkillStorm::StaticClass());
-	AActiveSkillWaterBall* NewActor3 = NewObject<AActiveSkillWaterBall>(GetTransientPackage(), AActiveSkillWaterBall::StaticClass());
-	APassiveSkillDefenseArea* NewActor4 = NewObject<APassiveSkillDefenseArea>(GetTransientPackage(), APassiveSkillDefenseArea::StaticClass());
-
-	AllSkillDatas.Add(NewActor);
-	AllSkillDatas.Add(NewActor2);
-	AllSkillDatas.Add(NewActor3);
-	AllSkillDatas.Add(NewActor4);
-
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(NewActor->SkillName));
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(NewActor2->SkillName));
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(NewActor3->SkillName));
-	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(NewActor4->SkillName));
+	
 
 	/*GetRandomSkills();
 
@@ -65,56 +47,59 @@ void USkillManagementComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	//if(Lightning)
+	// UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(Lightning->SkillName));
 }
 
 
 
-TArray<class ASkillBase*> USkillManagementComponent::GetSkillDataArr()
+
+void USkillManagementComponent::SkillLevelUp(class ASkillBase* targetSkill)
 {
-	return PlayerSkills;
+	for (int i = 0; i < SkillDatas.Num(); i++)
+	{
+		if (SkillDatas[i] == targetSkill)
+		{
+			SkillDatas[i]->Level += 1;
+			UE_LOG(LogTemp, Warning, TEXT("LevelUp"));
+		}
+	}
 }
-
 
 TArray<class ASkillBase*> USkillManagementComponent::GetRandomSkills()
 {
+	UE_LOG(LogTemp, Warning, TEXT("GetRandomSkills Start"));
+
 	// RandomSkills.Empty();
-	if (sizeof(AllSkillDatas) <= 0)
+	if (SkillDatas.Num() <= 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Fail"));
 	}
 
+	RandomSkills.Empty();
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < SkillDatas.Num(); i++)
 	{
-		if (AllSkillDatas.Num() > 0)
+		UE_LOG(LogTemp, Warning, TEXT("for AllSkillDatas Start"));
+
+		if (SkillDatas.Num() > 0)
 		{
 			// 랜덤 시드 초기화 (옵션)
 			FRandomStream RandomStream(FMath::Rand());
 
 			// 랜덤한 인덱스 선택
-			int32 RandomIndex = RandomStream.RandRange(0, AllSkillDatas.Num() - 1);
+			int32 RandomIndex = RandomStream.RandRange(0, SkillDatas.Num() - 1);
 
 			// 선택한 요소를 DestinationArray에 추가
-			RandomSkills.Add(AllSkillDatas[RandomIndex]);
+			RandomSkills.Add(SkillDatas[RandomIndex]);
 
 			UE_LOG(LogTemp, Warning, TEXT("%d"), RandomIndex);
 		}
 	}
 
 	return RandomSkills;
-
-	
 }
 
-
-
-void USkillManagementComponent::AddSkillDataToArr(ASkillBase* SkillData)
-{
-	if (SkillData)
-	{
-		PlayerSkills.Add(SkillData);
-	}
-}
 
 
 void USkillManagementComponent::GetSkill(ASkillBase* Skill)
@@ -126,9 +111,9 @@ void USkillManagementComponent::GetSkill(ASkillBase* Skill)
 		return;
 	}
 	
-	if (PlayerSkills.Find(Skill) == false)
+	if (SkillDatas.Find(Skill) == false)
 	{
-		PlayerSkills.Add(Skill);
+		SkillDatas.Add(Skill);
 	}
 	else
 	{

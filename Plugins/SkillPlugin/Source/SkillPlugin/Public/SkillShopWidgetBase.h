@@ -44,6 +44,4 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UUserWidget* SkillSlotWidget;
 
-	UFUNCTION()
-	void UpdateSkillSlotList();
 };

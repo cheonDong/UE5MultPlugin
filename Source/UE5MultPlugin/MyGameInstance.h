@@ -19,7 +19,10 @@ public:
 	
 public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
-	TArray<class ASkillBase*> AllSkillDatas;
+	TArray<class ASkillBase*> _AllSkillDatas;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
+	int32 SkillLevel = 0;
 
 	UFUNCTION()
 	TArray<class ASkillBase*> GetSkillDataArr();

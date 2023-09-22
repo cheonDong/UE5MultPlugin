@@ -6,6 +6,9 @@
 #include "Components/TextBlock.h"
 #include "Engine/Texture2D.h"
 #include "SkillManagementComponent.h"
+#include "SkillBase.h"
+#include "Engine/GameInstance.h"
+
 
 void USkillSlotWidgetBase::NativeConstruct()
 {
@@ -62,8 +65,25 @@ void USkillSlotWidgetBase::BindSkill(ASkillBase* SkillData)
 
 }
 
-void USkillSlotWidgetBase::AddSkillToInventory()
+void USkillSlotWidgetBase::AddSkillToInventory(ASkillBase* targetSkill)
 {
 	// 스킬 버튼을 누르면 인벤에 해당 스킬의 정보를 넘김
 	// 해당 스킬 레벨 업
+
+	UGameInstance* GI = GetWorld()->GetGameInstance();
+
+	if (GI)
+	{
+		
+	}
+
+	USkillManagementComponent* skillManager = Cast<USkillManagementComponent>(GetWorld()->GetFirstPlayerController()->FindComponentByClass<USkillManagementComponent>());
+
+	if (skillManager)
+	{
+		skillManager->SkillLevelUp(targetSkill);
+		UE_LOG(LogTemp, Warning, TEXT("%d"), targetSkill->Level);
+		UE_LOG(LogTemp, Warning, TEXT("AddSkillToInventory"));
+	}
+
 }

@@ -55,21 +55,12 @@ AActiveSkillLightning::AActiveSkillLightning()
 
 	SkillName = "Lightning";
 
-	SkillDescription = "전방에 낙뢰를 떨어뜨려 넓은 범위의 적에게 데미지를 준다.";
+	SkillDescription = "To enemies in a wide area to prevent lightning strikes on the front.";
 
-
-	static ConstructorHelpers::FObjectFinder<UTexture2D> Thumbnail(TEXT("/Game/CraftResourcesIcons/Textures/Tex_feather_01.Tex_feather_01"));
+	static ConstructorHelpers::FObjectFinder<UTexture2D> Thumbnail(TEXT("/Game/CraftResourcesIcons/Textures/Tex_gemstone_07_b.Tex_gemstone_07_b"));
 	if (Thumbnail.Succeeded())
 	{
 		SkillThumbnail = Thumbnail.Object;
-	}
-
-	USkillManagementComponent* skillManager = Cast<USkillManagementComponent>(FindComponentByClass<USkillManagementComponent>());
-
-	if (skillManager)
-	{
-		UE_LOG(LogClass, Warning, TEXT("skillManager"));
-		skillManager->AddSkillDataToArr(this);
 	}
 }
 

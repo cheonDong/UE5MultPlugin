@@ -47,8 +47,13 @@ AActiveSkillWaterBall::AActiveSkillWaterBall()
 
 	SkillName = "Water Ball";
 
-	SkillDescription = "전방으로 구 형태의 물을 날려 맡은 대상에게 큰 데미지를 준다.";
+	SkillDescription = "Blows a spherical ball of water forward, causing great damage to the target.";
 
+	static ConstructorHelpers::FObjectFinder<UTexture2D> Thumbnail(TEXT("/Game/CraftResourcesIcons/Textures/Tex_gemstone_10_b.Tex_gemstone_10_b"));
+	if (Thumbnail.Succeeded())
+	{
+		SkillThumbnail = Thumbnail.Object;
+	}
 	
 }
 

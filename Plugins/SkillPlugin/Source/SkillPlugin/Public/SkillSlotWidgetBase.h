@@ -32,6 +32,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UTexture2D* SkillIcon;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class ASkillBase* SkillClass;
+
 	/*FString Name;
 
 	int CostV;
@@ -46,6 +49,8 @@ public:
 	UFUNCTION()
 	void BindSkill(ASkillBase* SkillData);
 
-	UFUNCTION()
-	void AddSkillToInventory();
+	UFUNCTION(BlueprintCallable)
+	void AddSkillToInventory(class ASkillBase* targetSkill);
+
+	//void AddSkillToInventory_Implementation(ASkillBase* targetSkill);
 };

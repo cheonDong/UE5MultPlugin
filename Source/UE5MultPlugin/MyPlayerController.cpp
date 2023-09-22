@@ -19,30 +19,42 @@
 
 void AMyPlayerController::BeginPlay()
 {
-	/*SkillDatas[0] = NewObject<AActiveSkillLightning>();
-	SkillDatas[1] = NewObject<AActiveSkillStorm>();
-	SkillDatas[2] = NewObject<AActiveSkillWaterBall>();
-	SkillDatas[3] = NewObject<APassiveSkillDefenseArea>();*/
+	Super::BeginPlay();
+
+	PlayerSkills.Empty();
+
+	Lightning = NewObject<AActiveSkillLightning>(ASkillBase::StaticClass(), AActiveSkillLightning::StaticClass());
+	Storm = NewObject<AActiveSkillStorm>(ASkillBase::StaticClass(), AActiveSkillStorm::StaticClass());
+	WaterBall = NewObject<AActiveSkillWaterBall>(ASkillBase::StaticClass(), AActiveSkillWaterBall::StaticClass());
+	DefenseArea = NewObject<APassiveSkillDefenseArea>(ASkillBase::StaticClass(), APassiveSkillDefenseArea::StaticClass());
+
+	PlayerSkills.Add(Lightning);
+	PlayerSkills.Add(Storm);
+	PlayerSkills.Add(WaterBall);
+	PlayerSkills.Add(DefenseArea);
+
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(Lightning->SkillName));
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(Storm->SkillName));
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(WaterBall->SkillName));
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(DefenseArea->SkillName));
 	
 
 	SkillShopWidget = CreateWidget<UUserWidget>(GetWorld(), SkillShopWidgetClass);
+	AddSkillDataToSkillManager(PlayerSkills);
+
 	CreateSkillShopWidget();
-	
+
 }
 
 void AMyPlayerController::Tick(float DeltaSeconds)
 {
-	TArray<AActor*> arrOutActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AUE5MultPluginCharacter::StaticClass(), arrOutActors);
-
-	if (sizeof(arrOutActors) == 1)
-	{
-		
-	}
+	
+	Super::Tick(DeltaSeconds);
 }
 
 AMyPlayerController::AMyPlayerController()
 {
+	SkillManager = CreateDefaultSubobject<USkillManagementComponent>(TEXT("SkillManager"));
 }
 
 void AMyPlayerController::CreateSkillShopWidget()
@@ -76,20 +88,21 @@ void AMyPlayerController::BindSkillSData()
 	
 	if (player0)
 	{
-		USkillManagementComponent* skillManaer = Cast<USkillManagementComponent>(player0->FindComponentByClass<USkillManagementComponent>());
+		// USkillManagementComponent* skillManager = Cast<USkillManagementComponent>(player0->FindComponentByClass<USkillManagementComponent>());
+		USkillManagementComponent* skillManager = Cast<USkillManagementComponent>(this->FindComponentByClass<USkillManagementComponent>());
 
-		if (skillManaer)
+		if (skillManager)
 		{
 
-			TArray<class ASkillBase*> Mid = skillManaer->GetRandomSkills();
+			TArray<class ASkillBase*> Mid = skillManager->GetRandomSkills();
 
 			OnUpdateSkills(Mid);
 
 			// Mid 인덱스가 0에서 0이라고 오류 발생. 스킬 매니ㅓ에서 못가져오는듯
 
-			for (int i = 0; i < 3; i++)
+			for (int i = 0; i < Mid.Num(); i++)
 			{
-				// UE_LOG(LogTemp, Warning, TEXT("%f"), Mid[i]->PartZ);
+				UE_LOG(LogTemp, Warning, TEXT("%f"), Mid[i]->PartZ);
 			}
 
 			UE_LOG(LogTemp, Warning, TEXT("Bind Success"));
@@ -98,6 +111,48 @@ void AMyPlayerController::BindSkillSData()
 	
 }
 
+void AMyPlayerController::BindEnhancedItemData()
+{
+	USkillManagementComponent* skillManager = Cast<USkillManagementComponent>(this->FindComponentByClass<USkillManagementComponent>());
+
+	if (skillManager)
+	{
+
+		TArray<class ASkillBase*> Mid = skillManager->SkillDatas;
+
+		OnUpdateEnhancedItems(Mid);
+
+		// Mid 인덱스가 0에서 0이라고 오류 발생. 스킬 매니ㅓ에서 못가져오는듯
+
+		for (int i = 0; i < Mid.Num(); i++)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("%f"), Mid[i]->PartZ);
+		}
+
+		UE_LOG(LogTemp, Warning, TEXT("Bind Success"));
+	}
+}
+
+void AMyPlayerController::AddSkillDataToSkillManager(TArray<class ASkillBase*>& SkillDatas)
+{
+	AUE5MultPluginCharacter* player0 = Cast<AUE5MultPluginCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+
+	if (player0)
+	{
+		// USkillManagementComponent* skillManager = Cast<USkillManagementComponent>(player0->FindComponentByClass<USkillManagementComponent>());
+		USkillManagementComponent* skillManager = Cast<USkillManagementComponent>(this->FindComponentByClass<USkillManagementComponent>());
+
+		if (skillManager)
+		{
+			skillManager->SkillDatas = SkillDatas;
+		}
+	}
+}
+
 void AMyPlayerController::OnUpdateSkills_Implementation(const TArray<class ASkillBase*>& SkillDatas)
+{
+}
+
+void AMyPlayerController::OnUpdateEnhancementItems_Implementation(const TArray<class ASkillBase*>& SkillDatas)
 {
 }

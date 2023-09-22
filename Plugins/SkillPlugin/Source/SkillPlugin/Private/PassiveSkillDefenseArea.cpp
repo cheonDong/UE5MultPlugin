@@ -38,9 +38,13 @@ APassiveSkillDefenseArea::APassiveSkillDefenseArea()
 
 	SkillName = "Defense Area";
 
-	SkillDescription = "플레이어를 중심으로 생성되며, 범위 안에 들어오는 적에게 지속적인 데미지를 준다.";
+	SkillDescription = "It is created around the player and inflicts continuous damage to enemies that come within range.";
 
-	
+	static ConstructorHelpers::FObjectFinder<UTexture2D> Thumbnail(TEXT("/Game/CraftResourcesIcons/Textures/Tex_gemstone_08_b.Tex_gemstone_08_b"));
+	if (Thumbnail.Succeeded())
+	{
+		SkillThumbnail = Thumbnail.Object;
+	}
 }
 
 void APassiveSkillDefenseArea::BeginPlay()

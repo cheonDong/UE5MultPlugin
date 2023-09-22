@@ -6,6 +6,7 @@
 #include "Components/ListView.h"
 #include "SkillBase.h"
 #include "SkillSlotWidgetBase.h"
+#include "SkillManagementComponent.h"
 
 void USkillShopWidgetBase::NativeConstruct()
 {
@@ -54,9 +55,5 @@ void USkillShopWidgetBase::NativeConstruct()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Gold"));
 	}
-}
-
-void USkillShopWidgetBase::UpdateSkillSlotList()
-{
 }
 

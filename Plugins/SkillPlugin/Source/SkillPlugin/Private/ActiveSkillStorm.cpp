@@ -47,8 +47,13 @@ AActiveSkillStorm::AActiveSkillStorm()
 
 	SkillName = "Fire Storm";
 
-	SkillDescription = "전방에 화염 소용돌이를 소환해 적들에게 지속적인 데미지를 준다.";
+	SkillDescription = "Summons a flame vortex in front, causing continuous damage to enemies.";
 
+	static ConstructorHelpers::FObjectFinder<UTexture2D> Thumbnail(TEXT("/Game/CraftResourcesIcons/Textures/Tex_gemstone_09_b.Tex_gemstone_09_b"));
+	if (Thumbnail.Succeeded())
+	{
+		SkillThumbnail = Thumbnail.Object;
+	}
 	
 }
 
