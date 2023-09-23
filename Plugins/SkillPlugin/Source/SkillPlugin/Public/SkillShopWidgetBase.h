@@ -17,7 +17,7 @@ class SKILLPLUGIN_API USkillShopWidgetBase : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UListView* SkillList;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -42,6 +42,10 @@ public:
 	TSubclassOf<class UUserWidget> SkillSlotWidgetClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UUserWidget* SkillSlotWidget;
+	UUserWidget* SkillSlotWidget;*/
+
+	UFUNCTION()
+	void BindMyStatManagement();
+	
 
 };

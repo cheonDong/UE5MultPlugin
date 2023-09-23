@@ -8,10 +8,10 @@
 
 enum class EItemType : uint8;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateHp_TwoParams, float, CurHp, float, MaxHp);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateMp_TwoParams, float, CurMp, float, MaxMp);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateSpeed_TwoParams, float, CurSpeed, float, MaxSpeed);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdatePower_TwoParams, float, CurPower, float, MaxPower);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateHp_TwoParams, const float&, CurHp, const float&, MaxHp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateMp_TwoParams, const float&, CurMp, const float&, MaxMp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDele_UpdateSpeed_OneParam, const float&, Speed);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDele_UpdatePower_OneParam, const float&, Power);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ITEMPLUGIN_API UStatManagementComponent : public UActorComponent
@@ -44,16 +44,11 @@ public:
 	void OnRep_MaxMp();
 
 	UFUNCTION()
-	void OnRep_CurSpeed();
+	void OnRep_Speed();
 
 	UFUNCTION()
-	void OnRep_MaxSpeed();
+	void OnRep_Power();
 
-	UFUNCTION()
-	void OnRep_CurPower();
-
-	UFUNCTION()
-	void OnRep_MaxPower();
 public:
 	UPROPERTY(ReplicatedUsing = OnRep_CurHp)
 	float CurHp = 0.0f;
@@ -64,49 +59,48 @@ public:
 	UPROPERTY(ReplicatedUsing = OnRep_CurHp)
 	float CurMp = 0.0f;
 
-	UPROPERTY(ReplicatedUsing = OnRep_MaxHp)
+	UPROPERTY(ReplicatedUsing = OnRep_MaxMp)
 	float MaxMp = 100.0f;
 
-	UPROPERTY(ReplicatedUsing = OnRep_CurHp)
-	float CurSpeed = 0.0f;
+	UPROPERTY(ReplicatedUsing = OnRep_Speed)
+	float Speed = 60.0f;
 
-	UPROPERTY(ReplicatedUsing = OnRep_MaxHp)
-	float MaxSpeed = 100.0f;
-
-	UPROPERTY(ReplicatedUsing = OnRep_CurHp)
-	float CurPower = 0.0f;
-
-	UPROPERTY(ReplicatedUsing = OnRep_MaxHp)
-	float MaxPower = 100.0f;
+	UPROPERTY(ReplicatedUsing = OnRep_Power)
+	float Power = 100.0f;
 		
 public:
 	/*UFUNCTION(BlueprintCallable)
 	void ComparisonItemType(EItemType eItemType);*/
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void IncreaseMaxHp();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void RecurberyHp();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void IncreaseMaxMp();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void IncreaseSpeed();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void IncreasePower();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void RecurberyMp();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void BurfPower();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION()
 	void BurfSpeed();
 
+	UFUNCTION()
+	void GetBackSpeedVal();
+
+	UFUNCTION()
+	void GetBackPowerVal();
 
 public:
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
@@ -116,8 +110,12 @@ public:
 	FDele_UpdateMp_TwoParams Fuc_Dele_UpdateMp;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-	FDele_UpdateSpeed_TwoParams Fuc_Dele_UpdateSpeed;
+	FDele_UpdateSpeed_OneParam Fuc_Dele_UpdateSpeed;
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
-	FDele_UpdatePower_TwoParams Fuc_Dele_UpdatePower;
+	FDele_UpdatePower_OneParam Fuc_Dele_UpdatePower;
+
+	FTimerHandle Th_SpeedHandle;
+
+	FTimerHandle Th_PowerHandle;
 };

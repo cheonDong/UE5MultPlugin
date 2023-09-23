@@ -41,10 +41,8 @@ void UStatManagementComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	DOREPLIFETIME(UStatManagementComponent, MaxHp);
 	DOREPLIFETIME(UStatManagementComponent, CurMp);
 	DOREPLIFETIME(UStatManagementComponent, MaxMp);
-	DOREPLIFETIME(UStatManagementComponent, CurSpeed);
-	DOREPLIFETIME(UStatManagementComponent, MaxSpeed);
-	DOREPLIFETIME(UStatManagementComponent, CurPower);
-	DOREPLIFETIME(UStatManagementComponent, MaxPower);
+	DOREPLIFETIME(UStatManagementComponent, Speed);
+	DOREPLIFETIME(UStatManagementComponent, Power);
 }
 
 void UStatManagementComponent::OnRep_CurHp()
@@ -74,32 +72,19 @@ void UStatManagementComponent::OnRep_MaxMp()
 		Fuc_Dele_UpdateMp.Broadcast(CurHp, MaxHp);
 }
 
-void UStatManagementComponent::OnRep_CurSpeed()
-{
-	UE_LOG(LogTemp, Warning, TEXT("OnRep_CurSpeed"));
-	if (Fuc_Dele_UpdateSpeed.IsBound())
-		Fuc_Dele_UpdateSpeed.Broadcast(CurSpeed, MaxSpeed);
-}
 
-void UStatManagementComponent::OnRep_MaxSpeed()
+void UStatManagementComponent::OnRep_Speed()
 {
 	UE_LOG(LogTemp, Warning, TEXT("OnRep_MaxSpeed"));
 	if (Fuc_Dele_UpdateSpeed.IsBound())
-		Fuc_Dele_UpdateSpeed.Broadcast(CurSpeed, MaxSpeed);
+		Fuc_Dele_UpdateSpeed.Broadcast(Speed);
 }
 
-void UStatManagementComponent::OnRep_CurPower()
-{
-	UE_LOG(LogTemp, Warning, TEXT("OnRep_CurPower"));
-	if (Fuc_Dele_UpdatePower.IsBound())
-		Fuc_Dele_UpdatePower.Broadcast(CurPower, MaxPower);
-}
-
-void UStatManagementComponent::OnRep_MaxPower()
+void UStatManagementComponent::OnRep_Power()
 {
 	UE_LOG(LogTemp, Warning, TEXT("OnRep_MaxPower"));
 	if (Fuc_Dele_UpdatePower.IsBound())
-		Fuc_Dele_UpdatePower.Broadcast(CurPower, MaxPower);
+		Fuc_Dele_UpdatePower.Broadcast(Power);
 }
 
 void UStatManagementComponent::IncreaseMaxHp()
@@ -129,16 +114,16 @@ void UStatManagementComponent::IncreaseMaxMp()
 
 void UStatManagementComponent::IncreaseSpeed()
 {
-	MaxSpeed += 30;
+	Speed += 30;
 
-	OnRep_MaxSpeed();
+	OnRep_Speed();
 }
 
 void UStatManagementComponent::IncreasePower()
 {
-	MaxPower += 30;
+	Power += 30;
 
-	OnRep_MaxPower();
+	OnRep_Power();
 }
 
 void UStatManagementComponent::RecurberyMp()
@@ -153,21 +138,46 @@ void UStatManagementComponent::RecurberyMp()
 
 void UStatManagementComponent::BurfPower()
 {
-	CurPower = CurPower + 10.0f;
-	CurPower = FMath::Clamp(CurPower, 0.0f, MaxPower);
+	Power = Power + 10.0f;
 
-	UE_LOG(LogTemp, Warning, TEXT("%f"), CurPower);
+	UE_LOG(LogTemp, Warning, TEXT("%f"), Power);
 
-	OnRep_CurPower();
+	OnRep_Power();
+
+	GetWorld()->GetTimerManager().SetTimer(Th_PowerHandle, [&]()
+		{
+			GetBackPowerVal();
+		}, 10, false);
 }
 
 void UStatManagementComponent::BurfSpeed()
 {
-	CurSpeed = CurSpeed + 10.0f;
-	CurSpeed = FMath::Clamp(CurSpeed, 0.0f, MaxSpeed);
+	Speed = Speed + 10.0f;
 
-	UE_LOG(LogTemp, Warning, TEXT("%f"), CurSpeed);
+	UE_LOG(LogTemp, Warning, TEXT("%f"), Speed);
 
-	OnRep_CurSpeed();
+	OnRep_Speed();
+
+	GetWorld()->GetTimerManager().SetTimer(Th_SpeedHandle, [&]()
+		{
+			GetBackSpeedVal();
+		}, 10, false);
 }
 
+void UStatManagementComponent::GetBackPowerVal()
+{
+	Power = Power - 10.0f;
+
+	UE_LOG(LogTemp, Warning, TEXT("%f"), Power);
+
+	OnRep_Power();
+}
+
+void UStatManagementComponent::GetBackSpeedVal()
+{
+	Speed = Speed - 10.0f;
+
+	UE_LOG(LogTemp, Warning, TEXT("%f"), Speed);
+
+	OnRep_Speed();
+}

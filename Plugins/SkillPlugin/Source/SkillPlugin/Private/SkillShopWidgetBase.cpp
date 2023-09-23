@@ -14,7 +14,7 @@ void USkillShopWidgetBase::NativeConstruct()
 
 	UE_LOG(LogTemp, Warning, TEXT("NativeConstruct"));
 
-	SkillList = Cast<UListView>(GetWidgetFromName(TEXT("SkillSlotList")));
+	/*SkillList = Cast<UListView>(GetWidgetFromName(TEXT("SkillSlotList")));
 	if (SkillList)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SkillList"));
@@ -54,6 +54,11 @@ void USkillShopWidgetBase::NativeConstruct()
 	if (Gold)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Gold"));
-	}
+	}*/
+}
+
+void USkillShopWidgetBase::BindMyStatManagement()
+{
+	
 }
 

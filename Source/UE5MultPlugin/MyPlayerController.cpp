@@ -3,6 +3,7 @@
 
 #include "MyPlayerController.h"
 #include "Blueprint/UserWidget.h"
+#include "SkillBase.h"
 #include "ActiveSkillLightning.h"
 #include "ActiveSkillStorm.h"
 #include "ActiveSkillWaterBall.h"
@@ -13,9 +14,11 @@
 #include "SkillShopWidgetBase.h"
 #include "UE5MultPluginCharacter.h"
 #include "Net/UnrealNetwork.h"
-#include "SkillBase.h"
-#include "Kismet/GameplayStatics.h"
-
+#include "StatEnhancementObjectBase.h"
+#include "EnhancementMaxHp.h"
+#include "EnhancementMaxMp.h"
+#include "EnhancementPower.h"
+#include "EnhancementSpeed.h"
 
 void AMyPlayerController::BeginPlay()
 {
@@ -37,7 +40,18 @@ void AMyPlayerController::BeginPlay()
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(Storm->SkillName));
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(WaterBall->SkillName));
 	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(DefenseArea->SkillName));
-	
+
+	StatEnhancementObjs.Empty();
+
+	EnhancementMaxHp = NewObject<AEnhancementMaxHp>(ASkillBase::StaticClass(), AEnhancementMaxHp::StaticClass());
+	EnhancementMaxMp = NewObject<AEnhancementMaxMp>(ASkillBase::StaticClass(), AEnhancementMaxMp::StaticClass());
+	EnhancementSpeed = NewObject<AEnhancementSpeed>(ASkillBase::StaticClass(), AEnhancementSpeed::StaticClass());
+	EnhancementPower = NewObject<AEnhancementPower>(ASkillBase::StaticClass(), AEnhancementPower::StaticClass());
+
+	StatEnhancementObjs.Add(EnhancementMaxHp);
+	StatEnhancementObjs.Add(EnhancementMaxMp);
+	StatEnhancementObjs.Add(EnhancementSpeed);
+	StatEnhancementObjs.Add(EnhancementPower);
 
 	SkillShopWidget = CreateWidget<UUserWidget>(GetWorld(), SkillShopWidgetClass);
 	AddSkillDataToSkillManager(PlayerSkills);
@@ -80,6 +94,7 @@ void AMyPlayerController::CreateSkillShopWidget()
 	skillShop->UpdateSkillSlotList();*/
 
 	BindSkillSData();
+	BindEnhancedObjData();
 }
 
 void AMyPlayerController::BindSkillSData()
@@ -94,42 +109,37 @@ void AMyPlayerController::BindSkillSData()
 		if (skillManager)
 		{
 
-			TArray<class ASkillBase*> Mid = skillManager->GetRandomSkills();
+			TArray<class ASkillBase*> RandSkills = skillManager->GetRandomSkills();
 
-			OnUpdateSkills(Mid);
+			OnUpdateSkills(RandSkills);
 
 			// Mid 인덱스가 0에서 0이라고 오류 발생. 스킬 매니ㅓ에서 못가져오는듯
 
-			for (int i = 0; i < Mid.Num(); i++)
+			for (int i = 0; i < RandSkills.Num(); i++)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("%f"), Mid[i]->PartZ);
+				UE_LOG(LogTemp, Warning, TEXT("%f"), RandSkills[i]->PartZ);
 			}
 
-			UE_LOG(LogTemp, Warning, TEXT("Bind Success"));
+			UE_LOG(LogTemp, Warning, TEXT("BindSkillSData Success"));
 		}
 	}
 	
 }
 
-void AMyPlayerController::BindEnhancedItemData()
+void AMyPlayerController::BindEnhancedObjData()
 {
-	USkillManagementComponent* skillManager = Cast<USkillManagementComponent>(this->FindComponentByClass<USkillManagementComponent>());
+	AUE5MultPluginCharacter* player0 = Cast<AUE5MultPluginCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
 
-	if (skillManager)
+	if (player0)
 	{
+		OnUpdateEnhancementObjs(StatEnhancementObjs);
 
-		TArray<class ASkillBase*> Mid = skillManager->SkillDatas;
-
-		OnUpdateEnhancedItems(Mid);
-
-		// Mid 인덱스가 0에서 0이라고 오류 발생. 스킬 매니ㅓ에서 못가져오는듯
-
-		for (int i = 0; i < Mid.Num(); i++)
+		for (int i = 0; i < StatEnhancementObjs.Num(); i++)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("%f"), Mid[i]->PartZ);
+			UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(StatEnhancementObjs[i]->ObjName));
 		}
 
-		UE_LOG(LogTemp, Warning, TEXT("Bind Success"));
+		UE_LOG(LogTemp, Warning, TEXT("BindEnhancedItemData Success"));
 	}
 }
 
@@ -153,6 +163,6 @@ void AMyPlayerController::OnUpdateSkills_Implementation(const TArray<class ASkil
 {
 }
 
-void AMyPlayerController::OnUpdateEnhancementItems_Implementation(const TArray<class ASkillBase*>& SkillDatas)
+void AMyPlayerController::OnUpdateEnhancementObjs_Implementation(const TArray<class AStatEnhancementObjectBase*>& SkillDatas)
 {
 }

@@ -32,17 +32,32 @@ public:
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
 	TArray<class ASkillBase*> PlayerSkills;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Data")
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
 	class AActiveSkillLightning* Lightning;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Data")
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
 	class AActiveSkillStorm* Storm;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Data")
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
 	class AActiveSkillWaterBall* WaterBall;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Data")
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
 	class APassiveSkillDefenseArea* DefenseArea;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
+	TArray<class AStatEnhancementObjectBase*> StatEnhancementObjs;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
+	class AEnhancementMaxHp* EnhancementMaxHp;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
+	class AEnhancementMaxMp* EnhancementMaxMp;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
+	class AEnhancementSpeed* EnhancementSpeed;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
+	class AEnhancementPower* EnhancementPower;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	class USkillManagementComponent* SkillManager;
@@ -54,7 +69,7 @@ public:
 	void BindSkillSData();
 
 	UFUNCTION()
-	void BindEnhancedItemData();
+	void BindEnhancedObjData();
 
 	UFUNCTION()
 	void AddSkillDataToSkillManager(TArray<class ASkillBase*>& SkillDatas);
@@ -65,8 +80,8 @@ public:
 	void OnUpdateSkills_Implementation(const TArray<class ASkillBase*>& SkillDatas);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void OnUpdateEnhancementItems(const TArray<class ASkillBase*>& SkillDatas);
+	void OnUpdateEnhancementObjs(const TArray<class AStatEnhancementObjectBase*>& SkillDatas);
 
-	void OnUpdateEnhancementItems_Implementation(const TArray<class ASkillBase*>& SkillDatas);
+	void OnUpdateEnhancementObjs_Implementation(const TArray<class AStatEnhancementObjectBase*>& SkillDatas);
 
 };
