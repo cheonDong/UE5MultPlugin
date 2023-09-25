@@ -26,17 +26,23 @@ USkillManagementComponent::USkillManagementComponent()
 void USkillManagementComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 	
+	SkillDatas.Empty();
 
-	/*GetRandomSkills();
+	Lightning = NewObject<AActiveSkillLightning>(ASkillBase::StaticClass(), AActiveSkillLightning::StaticClass());
+	Storm = NewObject<AActiveSkillStorm>(ASkillBase::StaticClass(), AActiveSkillStorm::StaticClass());
+	WaterBall = NewObject<AActiveSkillWaterBall>(ASkillBase::StaticClass(), AActiveSkillWaterBall::StaticClass());
+	DefenseArea = NewObject<APassiveSkillDefenseArea>(ASkillBase::StaticClass(), APassiveSkillDefenseArea::StaticClass());
 
-	for (int i = 0; i < 3; i++)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%f"), RandomSkills[i]->PartZ);
-	}*/
-	
+	SkillDatas.Add(Lightning);
+	SkillDatas.Add(Storm);
+	SkillDatas.Add(WaterBall);
+	SkillDatas.Add(DefenseArea);
 
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(Lightning->SkillName));
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(Storm->SkillName));
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(WaterBall->SkillName));
+	UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(DefenseArea->SkillName));
 }
 
 
@@ -51,19 +57,70 @@ void USkillManagementComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	// UE_LOG(LogTemp, Warning, TEXT("%s"), *FString(Lightning->SkillName));
 }
 
+void USkillManagementComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+}
+
 
 
 
 void USkillManagementComponent::SkillLevelUp(class ASkillBase* targetSkill)
-{
-	for (int i = 0; i < SkillDatas.Num(); i++)
+{	
+
+	
+	if (targetSkill == Lightning)
 	{
-		if (SkillDatas[i] == targetSkill)
+		LightningLevel += 1;
+	}
+	else if (targetSkill == WaterBall)
+	{
+		WaterBallLevel += 1;
+	}
+	else if (targetSkill == Storm)
+	{
+		StormLevel += 1;
+	}
+	else if (targetSkill == DefenseArea)
+	{
+		DefenseAreaLevel += 1;
+	}
+
+	OnRep_SkillLevel();
+
+	/*for (int i = 0; i < SkillDatas.Num(); i++)
+	{
+		if (SkillDatas[i]->SkillName == targetSkill->SkillName)
 		{
 			SkillDatas[i]->Level += 1;
 			UE_LOG(LogTemp, Warning, TEXT("LevelUp"));
 		}
+	}*/
+}
+
+float USkillManagementComponent::GetSkillLevel(ASkillBase* targetSkill)
+{
+	if (targetSkill == Lightning)
+	{
+		return LightningLevel;
 	}
+	else if (targetSkill == WaterBall)
+	{
+		return WaterBallLevel;
+	}
+	else if (targetSkill == Storm)
+	{
+		return StormLevel;
+	}
+	else if (targetSkill == DefenseArea)
+	{
+		return DefenseAreaLevel;
+	}
+	else
+	{
+		return 0.0f;
+	}
+	
+	
 }
 
 TArray<class ASkillBase*> USkillManagementComponent::GetRandomSkills()
@@ -137,6 +194,13 @@ bool USkillManagementComponent::IsCanUse(ASkillBase* Skill)
 
 	// 스킬 사용이 가능하며 해당 캐릭터의 애로우 컴포넌트에서 스킬을 스폰하는 함수를 캐릭터에서 실행
 
+}
+
+void USkillManagementComponent::OnRep_SkillLevel()
+{
+	UE_LOG(LogTemp, Warning, TEXT("OnRep_SkillLevel"));
+	if (Fuc_Dele_UpdateSkillLevel.IsBound())
+		Fuc_Dele_UpdateSkillLevel.Broadcast(SkillDatas);
 }
 
 

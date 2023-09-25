@@ -17,7 +17,7 @@ class SKILLPLUGIN_API USkillSlotWidgetBase : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UButton* SKillButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -33,7 +33,7 @@ public:
 	class UTexture2D* SkillIcon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class ASkillBase* SkillClass;
+	class ASkillBase* SkillClass;*/
 
 	/*FString Name;
 
@@ -42,15 +42,8 @@ public:
 	FString Description;*/
 
 
-public:
-	UFUNCTION()
-	void SetSkillOnButton();
-
-	UFUNCTION()
-	void BindSkill(ASkillBase* SkillData);
-
 	UFUNCTION(BlueprintCallable)
-	void AddSkillToInventory(class ASkillBase* targetSkill);
+	void AddSkillToInventory(class ASkillBase* target);
 
 	//void AddSkillToInventory_Implementation(ASkillBase* targetSkill);
 };

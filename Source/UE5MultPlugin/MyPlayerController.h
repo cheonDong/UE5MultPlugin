@@ -62,14 +62,28 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	class USkillManagementComponent* SkillManager;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
+	class UStatManagementComponent* StatManager;
+
+	int32 Test = 0;
+
 	UFUNCTION()
 	void CreateSkillShopWidget();
+
+	UFUNCTION()
+	void CloseSkillShopWidget();
 
 	UFUNCTION()
 	void BindSkillSData();
 
 	UFUNCTION()
 	void BindEnhancedObjData();
+
+	UFUNCTION()
+	void BindPlayerInfo();
+
+	UFUNCTION()
+	void BindGameManagers();
 
 	UFUNCTION()
 	void AddSkillDataToSkillManager(TArray<class ASkillBase*>& SkillDatas);
@@ -80,8 +94,40 @@ public:
 	void OnUpdateSkills_Implementation(const TArray<class ASkillBase*>& SkillDatas);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void OnUpdateEnhancementObjs(const TArray<class AStatEnhancementObjectBase*>& SkillDatas);
+	void OnUpdateEnhancementObjs(const TArray<class AStatEnhancementObjectBase*>& objDatas);
 
-	void OnUpdateEnhancementObjs_Implementation(const TArray<class AStatEnhancementObjectBase*>& SkillDatas);
+	void OnUpdateEnhancementObjs_Implementation(const TArray<class AStatEnhancementObjectBase*>& objDatas);
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnUpdateMySkillLevel(const TArray<class ASkillBase*>& SkillDatas);
+
+	void OnUpdateMySkillLevel_Implementation(const TArray<class ASkillBase*>& SkillDatas);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnUpdateMyPlayerStat(const TArray<class AStatEnhancementObjectBase*>& objDatas);
+
+	void OnUpdateMyPlayerStat_Implementation(const TArray<class AStatEnhancementObjectBase*>& objDatas);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnUpdateMyMaxHp(float CurHp, float MaxHp);
+
+	void OnUpdateMyMaxHp_Implementation(float CurHp, float MaxHp);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnUpdateMyMaxMp(float CurMp, float MaxMp);
+
+	void OnUpdateMyMaxMp_Implementation(float CurHp, float MaxHp);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnUpdateMySpeed(float Speed);
+
+	void OnUpdateMySpeed_Implementation(float Speed);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnUpdateMyPower(float Power);
+
+	void OnUpdateMyPower_Implementation(float Power);
+
+
+	FTimerHandle th_BindMyStatManager;
 };

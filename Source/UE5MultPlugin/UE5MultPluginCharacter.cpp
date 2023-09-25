@@ -12,6 +12,7 @@
 #include "StatManagementComponent.h"
 #include "MonsterStatComponent.h"
 #include "SkillManagementComponent.h"
+#include "MyPlayerController.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -145,6 +146,8 @@ void AUE5MultPluginCharacter::SetupPlayerInputComponent(class UInputComponent* P
 		//Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUE5MultPluginCharacter::Look);
 
+		EnhancedInputComponent->BindAction(Test, ETriggerEvent::Started, this, &AUE5MultPluginCharacter::TestWidget);
+
 	}
 
 }
@@ -182,6 +185,25 @@ void AUE5MultPluginCharacter::Look(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
+	}
+}
+
+void AUE5MultPluginCharacter::TestWidget(const FInputActionValue& Value)
+{
+	AMyPlayerController* PlayerController = Cast<AMyPlayerController>(Controller);
+
+	if (PlayerController)
+	{
+		if (PlayerController->Test == 0)
+		{
+			PlayerController->CreateSkillShopWidget();
+			PlayerController->Test = 1;
+		}
+		else
+		{
+			PlayerController->CloseSkillShopWidget();
+			PlayerController->Test = 0;
+		}
 	}
 }
 

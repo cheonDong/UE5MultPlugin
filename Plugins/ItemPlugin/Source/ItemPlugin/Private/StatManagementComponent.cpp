@@ -3,6 +3,11 @@
 
 #include "StatManagementComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "StatEnhancementObjectBase.h"
+#include "EnhancementMaxHp.h"
+#include "EnhancementMaxMp.h"
+#include "EnhancementPower.h"
+#include "EnhancementSpeed.h"
 
 // Sets default values for this component's properties
 UStatManagementComponent::UStatManagementComponent()
@@ -87,9 +92,29 @@ void UStatManagementComponent::OnRep_Power()
 		Fuc_Dele_UpdatePower.Broadcast(Power);
 }
 
+void UStatManagementComponent::ComparisonObjType(AStatEnhancementObjectBase* target)
+{
+	if (target == HpVal)
+	{
+		IncreaseMaxHp();
+	}
+	else if (target == MpVal)
+	{
+		IncreaseMaxMp();
+	}
+	else if (target == SpeedVal)
+	{
+		IncreaseSpeed();
+	}
+	else if (target == PowerVal)
+	{
+		IncreasePower();
+	}
+}
+
 void UStatManagementComponent::IncreaseMaxHp()
 {
-	MaxHp += 30;
+	MaxHp += 5.0f;
 
 	OnRep_MaxHp();
 }
@@ -107,21 +132,21 @@ void UStatManagementComponent::RecurberyHp()
 
 void UStatManagementComponent::IncreaseMaxMp()
 {
-	MaxMp += 30;
+	MaxMp += 5.0f;
 
 	OnRep_MaxMp();
 }
 
 void UStatManagementComponent::IncreaseSpeed()
 {
-	Speed += 30;
+	Speed += 5.0f;
 
 	OnRep_Speed();
 }
 
 void UStatManagementComponent::IncreasePower()
 {
-	Power += 30;
+	Power += 5.0f;
 
 	OnRep_Power();
 }
@@ -147,6 +172,7 @@ void UStatManagementComponent::BurfPower()
 	GetWorld()->GetTimerManager().SetTimer(Th_PowerHandle, [&]()
 		{
 			GetBackPowerVal();
+			UE_LOG(LogTemp, Warning, TEXT("%f"), Power);
 		}, 10, false);
 }
 
@@ -161,6 +187,7 @@ void UStatManagementComponent::BurfSpeed()
 	GetWorld()->GetTimerManager().SetTimer(Th_SpeedHandle, [&]()
 		{
 			GetBackSpeedVal();
+			UE_LOG(LogTemp, Warning, TEXT("%f"), Speed);
 		}, 10, false);
 }
 

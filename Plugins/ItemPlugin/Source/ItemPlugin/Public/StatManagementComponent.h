@@ -8,10 +8,10 @@
 
 enum class EItemType : uint8;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateHp_TwoParams, const float&, CurHp, const float&, MaxHp);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateMp_TwoParams, const float&, CurMp, const float&, MaxMp);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDele_UpdateSpeed_OneParam, const float&, Speed);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDele_UpdatePower_OneParam, const float&, Power);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateHp_TwoParams, float, CurHp, float, MaxHp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateMp_TwoParams, float, CurMp, float, MaxMp);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDele_UpdateSpeed_OneParam, float, Speed);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDele_UpdatePower_OneParam, float, Power);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ITEMPLUGIN_API UStatManagementComponent : public UActorComponent
@@ -29,6 +29,8 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
 	UFUNCTION()
@@ -67,10 +69,22 @@ public:
 
 	UPROPERTY(ReplicatedUsing = OnRep_Power)
 	float Power = 100.0f;
-		
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
+	class AEnhancementMaxHp* HpVal; 
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
+	class AEnhancementMaxMp* MpVal;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
+	class AEnhancementSpeed* SpeedVal;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
+	class AEnhancementPower* PowerVal;
+
 public:
-	/*UFUNCTION(BlueprintCallable)
-	void ComparisonItemType(EItemType eItemType);*/
+	UFUNCTION()
+	void ComparisonObjType(class AStatEnhancementObjectBase* target);
 
 	UFUNCTION()
 	void IncreaseMaxHp();

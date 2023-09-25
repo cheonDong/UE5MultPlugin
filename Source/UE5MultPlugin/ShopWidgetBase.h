@@ -20,23 +20,27 @@ public:
 	UFUNCTION()
 	void BindMyStatManagement();
 
-	/*UFUNCTION()
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void OnUpdateMyMaxHp(float CurHp, float MaxHp);
 
 	void OnUpdateMyMaxHp_Implementation(float CurHp, float MaxHp);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void OnUpdateMyMaxMp(float CurMp, float MaxMp);
 
 	void OnUpdateMyMaxMp_Implementation(float CurHp, float MaxHp);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void OnUpdateMySpeed(float Speed);
 
 	void OnUpdateMySpeed_Implementation(float Speed);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void OnUpdateMyPower(float Power);
 
-	void OnUpdateMyPower_Implementation(float Power);*/
+	void OnUpdateMyPower_Implementation(float Power);
+
+	
+
+	FTimerHandle th_BindMyStatManager;
 };

@@ -39,6 +39,9 @@ class AUE5MultPluginCharacter : public ACharacter, public IItemInterface
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* Test;
+
 	
 
 public:
@@ -52,7 +55,8 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
+	
+	void TestWidget(const FInputActionValue& Value);
 
 protected:
 	// APawn interface

@@ -14,6 +14,7 @@
 #include "SkillShopWidgetBase.h"
 #include "UE5MultPluginCharacter.h"
 #include "Net/UnrealNetwork.h"
+#include "StatManagementComponent.h"
 #include "StatEnhancementObjectBase.h"
 #include "EnhancementMaxHp.h"
 #include "EnhancementMaxMp.h"
@@ -23,6 +24,8 @@
 void AMyPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	
 
 	PlayerSkills.Empty();
 
@@ -54,9 +57,9 @@ void AMyPlayerController::BeginPlay()
 	StatEnhancementObjs.Add(EnhancementPower);
 
 	SkillShopWidget = CreateWidget<UUserWidget>(GetWorld(), SkillShopWidgetClass);
-	AddSkillDataToSkillManager(PlayerSkills);
+	// AddSkillDataToSkillManager(PlayerSkills);
 
-	CreateSkillShopWidget();
+	// CreateSkillShopWidget();
 
 }
 
@@ -69,6 +72,8 @@ void AMyPlayerController::Tick(float DeltaSeconds)
 AMyPlayerController::AMyPlayerController()
 {
 	SkillManager = CreateDefaultSubobject<USkillManagementComponent>(TEXT("SkillManager"));
+
+	StatManager = CreateDefaultSubobject<UStatManagementComponent>(TEXT("StatManager"));
 }
 
 void AMyPlayerController::CreateSkillShopWidget()
@@ -95,6 +100,13 @@ void AMyPlayerController::CreateSkillShopWidget()
 
 	BindSkillSData();
 	BindEnhancedObjData();
+	BindPlayerInfo();
+	BindGameManagers();
+}
+
+void AMyPlayerController::CloseSkillShopWidget()
+{
+	SkillShopWidget->RemoveFromParent();
 }
 
 void AMyPlayerController::BindSkillSData()
@@ -112,8 +124,6 @@ void AMyPlayerController::BindSkillSData()
 			TArray<class ASkillBase*> RandSkills = skillManager->GetRandomSkills();
 
 			OnUpdateSkills(RandSkills);
-
-			// Mid 인덱스가 0에서 0이라고 오류 발생. 스킬 매니ㅓ에서 못가져오는듯
 
 			for (int i = 0; i < RandSkills.Num(); i++)
 			{
@@ -143,6 +153,56 @@ void AMyPlayerController::BindEnhancedObjData()
 	}
 }
 
+void AMyPlayerController::BindPlayerInfo()
+{
+	AUE5MultPluginCharacter* player0 = Cast<AUE5MultPluginCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
+
+	if (player0)
+	{
+		OnUpdateMySkillLevel(PlayerSkills);
+
+		for (int i = 0; i < PlayerSkills.Num(); i++)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("%f"), PlayerSkills[i]->PartZ);
+		}
+
+		UE_LOG(LogTemp, Warning, TEXT("BindEnhancedItemData Success"));
+	}
+
+	return;
+}
+
+void AMyPlayerController::BindGameManagers()
+{
+	USkillManagementComponent* skillManager = Cast<USkillManagementComponent>(GetWorld()->GetFirstPlayerController()->FindComponentByClass<USkillManagementComponent>());
+
+	UStatManagementComponent* statManager = Cast<UStatManagementComponent>(GetWorld()->GetFirstPlayerController()->FindComponentByClass<UStatManagementComponent>());
+
+	if (skillManager)
+	{
+		if (statManager)
+		{
+			skillManager->Fuc_Dele_UpdateSkillLevel.AddDynamic(this, &AMyPlayerController::OnUpdateMySkillLevel);
+			OnUpdateMySkillLevel(skillManager->SkillDatas);
+
+			statManager->Fuc_Dele_UpdateHp.AddDynamic(this, &AMyPlayerController::OnUpdateMyMaxHp);
+			OnUpdateMyMaxHp(StatManager->CurHp, StatManager->MaxHp);
+
+			statManager->Fuc_Dele_UpdateMp.AddDynamic(this, &AMyPlayerController::OnUpdateMyMaxMp);
+			OnUpdateMyMaxMp(StatManager->CurMp, StatManager->MaxMp);
+
+			statManager->Fuc_Dele_UpdateSpeed.AddDynamic(this, &AMyPlayerController::OnUpdateMySpeed);
+			OnUpdateMySpeed(StatManager->Speed);
+
+			statManager->Fuc_Dele_UpdatePower.AddDynamic(this, &AMyPlayerController::OnUpdateMyPower);
+			OnUpdateMyPower(StatManager->Power);
+		}
+	}
+
+	FTimerManager& timerManager = GetWorld()->GetTimerManager();
+	timerManager.SetTimer(th_BindMyStatManager, this, &AMyPlayerController::BindGameManagers, 0.1f, false);
+}
+
 void AMyPlayerController::AddSkillDataToSkillManager(TArray<class ASkillBase*>& SkillDatas)
 {
 	AUE5MultPluginCharacter* player0 = Cast<AUE5MultPluginCharacter>(UGameplayStatics::GetPlayerCharacter(this, 0));
@@ -163,6 +223,30 @@ void AMyPlayerController::OnUpdateSkills_Implementation(const TArray<class ASkil
 {
 }
 
-void AMyPlayerController::OnUpdateEnhancementObjs_Implementation(const TArray<class AStatEnhancementObjectBase*>& SkillDatas)
+void AMyPlayerController::OnUpdateEnhancementObjs_Implementation(const TArray<class AStatEnhancementObjectBase*>& objDatas)
+{
+}
+
+void AMyPlayerController::OnUpdateMySkillLevel_Implementation(const TArray<class ASkillBase*>& skillDatas)
+{
+}
+
+void AMyPlayerController::OnUpdateMyPlayerStat_Implementation(const TArray<class AStatEnhancementObjectBase*>& objDatas)
+{
+}
+
+void AMyPlayerController::OnUpdateMyMaxHp_Implementation(float CurHp, float MaxHp)
+{
+}
+
+void AMyPlayerController::OnUpdateMyMaxMp_Implementation(float CurHp, float MaxHp)
+{
+}
+
+void AMyPlayerController::OnUpdateMySpeed_Implementation(float Speed)
+{
+}
+
+void AMyPlayerController::OnUpdateMyPower_Implementation(float Power)
 {
 }
