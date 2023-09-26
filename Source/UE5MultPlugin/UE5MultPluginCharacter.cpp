@@ -11,7 +11,6 @@
 #include "EnhancedInputSubsystems.h"
 #include "StatManagementComponent.h"
 #include "MonsterStatComponent.h"
-#include "SkillManagementComponent.h"
 #include "MyPlayerController.h"
 
 
@@ -54,11 +53,11 @@ AUE5MultPluginCharacter::AUE5MultPluginCharacter()
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 
-	StatManager = CreateDefaultSubobject<UStatManagementComponent>(TEXT("StatManager"));
+	// StatManager = CreateDefaultSubobject<UStatManagementComponent>(TEXT("StatManager"));
 
 	MonsterStat = CreateDefaultSubobject<UMonsterStatComponent>(TEXT("MonsterStat"));
 
-	SkillManager = CreateDefaultSubobject<USkillManagementComponent>(TEXT("SkillManager"));
+	// SkillManager = CreateDefaultSubobject<USkillManagementComponent>(TEXT("SkillManager"));
 }
 
 void AUE5MultPluginCharacter::BeginPlay()
@@ -78,38 +77,56 @@ void AUE5MultPluginCharacter::BeginPlay()
 
 void AUE5MultPluginCharacter::EventGetItem_Implementation(EItemType itemType)
 {
-	if (IsValid(StatManager) == false)
+	AMyPlayerController* PC = Cast<AMyPlayerController>(this->GetController());
+
+	if (PC)
 	{
-		return;
+		UStatManagementComponent* StatManager = Cast<UStatManagementComponent>(PC->FindComponentByClass<UStatManagementComponent>());
+		
+		if (StatManager)
+		{
+			if (IsValid(StatManager) == false)
+			{
+				return;
+			}
+
+			switch (itemType)
+			{
+			case EItemType::IT_RecoveryHp:
+			{
+				UE_LOG(LogTemp, Warning, TEXT("IT_RecoveryHp"));
+				StatManager->RecurberyHp();
+				break;
+			}
+			case EItemType::IT_RecoveryMp:
+			{
+				UE_LOG(LogTemp, Warning, TEXT("IT_RecoveryMp"));
+				StatManager->RecurberyMp();
+				break;
+			}
+			case EItemType::IT_SpeedUp:
+			{
+				UE_LOG(LogTemp, Warning, TEXT("IT_SpeedUp"));
+				StatManager->BurfSpeed();
+				break;
+			}
+			case EItemType::IT_PowerUp:
+			{
+				UE_LOG(LogTemp, Warning, TEXT("IT_PowerUp"));
+				StatManager->BurfPower();
+				break;
+			}
+			case EItemType::IT_Gold:
+			{
+				UE_LOG(LogTemp, Warning, TEXT("IT_Gold"));
+				PC->Gold += 50;
+				PC->OnUpdateMyGold(PC->Gold);
+				break;
+			}
+			}
+		}
 	}
 	
-	switch (itemType)
-	{
-		case EItemType::IT_RecoveryHp:
-		{
-			UE_LOG(LogTemp, Warning, TEXT("IT_RecoveryHp"));
-			StatManager->RecurberyHp();
-			break;
-		}
-		case EItemType::IT_RecoveryMp:
-		{
-			UE_LOG(LogTemp, Warning, TEXT("IT_RecoveryMp"));
-			StatManager->RecurberyMp();
-			break;
-		}
-		case EItemType::IT_SpeedUp:
-		{
-			UE_LOG(LogTemp, Warning, TEXT("IT_SpeedUp"));
-			StatManager->BurfSpeed();
-			break;
-		}
-		case EItemType::IT_PowerUp:
-		{
-			UE_LOG(LogTemp, Warning, TEXT("IT_PowerUp"));
-			StatManager->BurfPower();
-			break;
-		}
-	}
 }
 
 float AUE5MultPluginCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)

@@ -78,13 +78,7 @@ public:
 	void EventGetItem_Implementation(EItemType itemType) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
-	class UStatManagementComponent* StatManager;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
 	class UMonsterStatComponent* MonsterStat;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Component")
-	class USkillManagementComponent* SkillManager;
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
 		class AController* EventInstigator, AActor* DamageCauser) override;

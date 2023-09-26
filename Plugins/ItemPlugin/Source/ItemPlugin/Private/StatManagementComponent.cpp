@@ -4,10 +4,6 @@
 #include "StatManagementComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "StatEnhancementObjectBase.h"
-#include "EnhancementMaxHp.h"
-#include "EnhancementMaxMp.h"
-#include "EnhancementPower.h"
-#include "EnhancementSpeed.h"
 
 // Sets default values for this component's properties
 UStatManagementComponent::UStatManagementComponent()
@@ -59,6 +55,7 @@ void UStatManagementComponent::OnRep_CurHp()
 
 void UStatManagementComponent::OnRep_MaxHp()
 {
+	UE_LOG(LogTemp, Warning, TEXT("OnRep_MaxHp"));
 	if (Fuc_Dele_UpdateHp.IsBound())
 		Fuc_Dele_UpdateHp.Broadcast(CurHp, MaxHp);
 }
@@ -80,35 +77,41 @@ void UStatManagementComponent::OnRep_MaxMp()
 
 void UStatManagementComponent::OnRep_Speed()
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnRep_MaxSpeed"));
+	UE_LOG(LogTemp, Warning, TEXT("OnRep_Speed"));
 	if (Fuc_Dele_UpdateSpeed.IsBound())
 		Fuc_Dele_UpdateSpeed.Broadcast(Speed);
 }
 
 void UStatManagementComponent::OnRep_Power()
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnRep_MaxPower"));
+	UE_LOG(LogTemp, Warning, TEXT("OnRep_Power"));
 	if (Fuc_Dele_UpdatePower.IsBound())
 		Fuc_Dele_UpdatePower.Broadcast(Power);
 }
 
 void UStatManagementComponent::ComparisonObjType(AStatEnhancementObjectBase* target)
 {
-	if (target == HpVal)
+	UE_LOG(LogTemp, Warning, TEXT("StatManager ComparisonObjType"))
+	
+	if (target->ObjName == "EnhancementMaxHp")
 	{
 		IncreaseMaxHp();
+		UE_LOG(LogTemp, Warning, TEXT("IncreaseMaxHp"));
 	}
-	else if (target == MpVal)
+	else if (target->ObjName == "EnhancementMaxMp")
 	{
 		IncreaseMaxMp();
+		UE_LOG(LogTemp, Warning, TEXT("IncreaseMaxMp"));
 	}
-	else if (target == SpeedVal)
+	else if (target->ObjName == "EnhancementSpeed")
 	{
 		IncreaseSpeed();
+		UE_LOG(LogTemp, Warning, TEXT("IncreaseSpeed"));
 	}
-	else if (target == PowerVal)
+	else if (target->ObjName == "EnhancementPower")
 	{
 		IncreasePower();
+		UE_LOG(LogTemp, Warning, TEXT("IncreasePower"));
 	}
 }
 

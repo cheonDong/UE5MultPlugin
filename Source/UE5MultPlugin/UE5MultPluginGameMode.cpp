@@ -3,7 +3,6 @@
 #include "UE5MultPluginGameMode.h"
 #include "UE5MultPluginCharacter.h"
 #include "UObject/ConstructorHelpers.h"
-#include "SkillSlotWidgetBase.h"
 #include "Kismet/GameplayStatics.h"
 #include "SkillBase.h"
 
@@ -23,23 +22,25 @@ AUE5MultPluginGameMode::AUE5MultPluginGameMode()
 
 void AUE5MultPluginGameMode::Tick(float DeltaSeconds)
 {
-	TArray<AActor*> arrOutActors;
+	Super::Tick(DeltaSeconds);
+	
+	/*TArray<AActor*> arrOutActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASkillBase::StaticClass(), arrOutActors);
 
-	SetRandomSkills();
+	SetRandomSkills();*/
 }
 
 
 void AUE5MultPluginGameMode::SetRandomSkills()
 {
-	UE_LOG(LogTemp, Warning, TEXT("SetRandomSkills"));
+	/*UE_LOG(LogTemp, Warning, TEXT("SetRandomSkills"));
 	
 	TSubclassOf<ASkillBase> randSkill = SkillDatas[FMath::RandRange(0, SkillDatas.Num() - 1)];
 
-	AddSkills(randSkill);
+	AddSkills(randSkill);*/
 }
 
 void AUE5MultPluginGameMode::AddSkills(TSubclassOf<ASkillBase> SkillData)
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s"), SkillData);
+	/*UE_LOG(LogTemp, Warning, TEXT("%s"), SkillData);*/
 }

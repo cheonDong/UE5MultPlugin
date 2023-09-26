@@ -13,6 +13,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FDele_UpdateMp_TwoParams, float, Cu
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDele_UpdateSpeed_OneParam, float, Speed);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDele_UpdatePower_OneParam, float, Power);
 
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class ITEMPLUGIN_API UStatManagementComponent : public UActorComponent
 {
@@ -51,6 +52,8 @@ public:
 	UFUNCTION()
 	void OnRep_Power();
 
+	
+
 public:
 	UPROPERTY(ReplicatedUsing = OnRep_CurHp)
 	float CurHp = 0.0f;
@@ -69,18 +72,6 @@ public:
 
 	UPROPERTY(ReplicatedUsing = OnRep_Power)
 	float Power = 100.0f;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
-	class AEnhancementMaxHp* HpVal; 
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
-	class AEnhancementMaxMp* MpVal;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
-	class AEnhancementSpeed* SpeedVal;
-
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
-	class AEnhancementPower* PowerVal;
 
 public:
 	UFUNCTION()

@@ -14,8 +14,8 @@ TArray<class ASkillBase*> UMyGameInstance::GetSkillDataArr()
 
 void UMyGameInstance::AddSkilltoArr(ASkillBase* SkillData)
 {
-	if (SkillData)
+	/*if (SkillData)
 	{
 		_AllSkillDatas.Add(SkillData);
-	}
+	}*/
 }

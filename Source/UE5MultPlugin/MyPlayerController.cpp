@@ -11,7 +11,6 @@
 #include "Containers/Array.h"
 #include "Kismet/GameplayStatics.h"
 #include "SkillManagementComponent.h"
-#include "SkillShopWidgetBase.h"
 #include "UE5MultPluginCharacter.h"
 #include "Net/UnrealNetwork.h"
 #include "StatManagementComponent.h"
@@ -20,12 +19,11 @@
 #include "EnhancementMaxMp.h"
 #include "EnhancementPower.h"
 #include "EnhancementSpeed.h"
+#include "Widget_SkillSlot.h"
 
 void AMyPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
-	
 
 	PlayerSkills.Empty();
 
@@ -57,9 +55,6 @@ void AMyPlayerController::BeginPlay()
 	StatEnhancementObjs.Add(EnhancementPower);
 
 	SkillShopWidget = CreateWidget<UUserWidget>(GetWorld(), SkillShopWidgetClass);
-	// AddSkillDataToSkillManager(PlayerSkills);
-
-	// CreateSkillShopWidget();
 
 }
 
@@ -81,27 +76,15 @@ void AMyPlayerController::CreateSkillShopWidget()
 	
 	SkillShopWidget->AddToViewport();
 
-	//USkillManagementComponent* SkillManager = Cast<USkillManagementComponent>(GetCharacter()->FindComponentByClass<USkillManagementComponent>());
-	//if (SkillManager == nullptr)
-	//{
-	//	return;
-	//}
-
 	this->SetInputMode(FInputModeGameAndUI());
 	this->bShowMouseCursor = true;
 
-	/*USkillShopWidgetBase* skillShop = Cast<USkillShopWidgetBase>(SkillShopWidget);
-	if (skillShop == nullptr)
-	{
-		return;
-	}
-
-	skillShop->UpdateSkillSlotList();*/
 
 	BindSkillSData();
 	BindEnhancedObjData();
 	BindPlayerInfo();
-	BindGameManagers();
+	OnUpdateMyGold(Gold);
+	BindStatManagers();
 }
 
 void AMyPlayerController::CloseSkillShopWidget()
@@ -159,6 +142,11 @@ void AMyPlayerController::BindPlayerInfo()
 
 	if (player0)
 	{
+		USkillManagementComponent* skillManager = Cast<USkillManagementComponent>(GetWorld()->GetFirstPlayerController()->FindComponentByClass<USkillManagementComponent>());
+		
+		skillManager->Fuc_Dele_UpdateSkillLevel.AddDynamic(this, &AMyPlayerController::OnUpdateMySkillLevel);
+		OnUpdateMySkillLevel(skillManager->SkillDatas);
+		
 		OnUpdateMySkillLevel(PlayerSkills);
 
 		for (int i = 0; i < PlayerSkills.Num(); i++)
@@ -172,35 +160,27 @@ void AMyPlayerController::BindPlayerInfo()
 	return;
 }
 
-void AMyPlayerController::BindGameManagers()
+void AMyPlayerController::BindStatManagers()
 {
-	USkillManagementComponent* skillManager = Cast<USkillManagementComponent>(GetWorld()->GetFirstPlayerController()->FindComponentByClass<USkillManagementComponent>());
+	UStatManagementComponent* statManager = Cast<UStatManagementComponent>(this->FindComponentByClass<UStatManagementComponent>());
 
-	UStatManagementComponent* statManager = Cast<UStatManagementComponent>(GetWorld()->GetFirstPlayerController()->FindComponentByClass<UStatManagementComponent>());
-
-	if (skillManager)
+	if (statManager)
 	{
-		if (statManager)
-		{
-			skillManager->Fuc_Dele_UpdateSkillLevel.AddDynamic(this, &AMyPlayerController::OnUpdateMySkillLevel);
-			OnUpdateMySkillLevel(skillManager->SkillDatas);
+		statManager->Fuc_Dele_UpdateHp.AddDynamic(this, &AMyPlayerController::OnUpdateMyMaxHp);
+		OnUpdateMyMaxHp(StatManager->CurHp, StatManager->MaxHp);
 
-			statManager->Fuc_Dele_UpdateHp.AddDynamic(this, &AMyPlayerController::OnUpdateMyMaxHp);
-			OnUpdateMyMaxHp(StatManager->CurHp, StatManager->MaxHp);
+		statManager->Fuc_Dele_UpdateMp.AddDynamic(this, &AMyPlayerController::OnUpdateMyMaxMp);
+		OnUpdateMyMaxMp(StatManager->CurMp, StatManager->MaxMp);
 
-			statManager->Fuc_Dele_UpdateMp.AddDynamic(this, &AMyPlayerController::OnUpdateMyMaxMp);
-			OnUpdateMyMaxMp(StatManager->CurMp, StatManager->MaxMp);
+		statManager->Fuc_Dele_UpdateSpeed.AddDynamic(this, &AMyPlayerController::OnUpdateMySpeed);
+		OnUpdateMySpeed(StatManager->Speed);
 
-			statManager->Fuc_Dele_UpdateSpeed.AddDynamic(this, &AMyPlayerController::OnUpdateMySpeed);
-			OnUpdateMySpeed(StatManager->Speed);
-
-			statManager->Fuc_Dele_UpdatePower.AddDynamic(this, &AMyPlayerController::OnUpdateMyPower);
-			OnUpdateMyPower(StatManager->Power);
-		}
+		statManager->Fuc_Dele_UpdatePower.AddDynamic(this, &AMyPlayerController::OnUpdateMyPower);
+		OnUpdateMyPower(StatManager->Power);
 	}
 
 	FTimerManager& timerManager = GetWorld()->GetTimerManager();
-	timerManager.SetTimer(th_BindMyStatManager, this, &AMyPlayerController::BindGameManagers, 0.1f, false);
+	timerManager.SetTimer(th_BindMyStatManager, this, &AMyPlayerController::BindStatManagers, 0.1f, false);
 }
 
 void AMyPlayerController::AddSkillDataToSkillManager(TArray<class ASkillBase*>& SkillDatas)
@@ -231,10 +211,6 @@ void AMyPlayerController::OnUpdateMySkillLevel_Implementation(const TArray<class
 {
 }
 
-void AMyPlayerController::OnUpdateMyPlayerStat_Implementation(const TArray<class AStatEnhancementObjectBase*>& objDatas)
-{
-}
-
 void AMyPlayerController::OnUpdateMyMaxHp_Implementation(float CurHp, float MaxHp)
 {
 }
@@ -248,5 +224,9 @@ void AMyPlayerController::OnUpdateMySpeed_Implementation(float Speed)
 }
 
 void AMyPlayerController::OnUpdateMyPower_Implementation(float Power)
+{
+}
+
+void AMyPlayerController::OnUpdateMyGold_Implementation(int32 coin)
 {
 }

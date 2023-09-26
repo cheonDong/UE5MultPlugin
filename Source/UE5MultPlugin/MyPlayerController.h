@@ -67,6 +67,9 @@ public:
 
 	int32 Test = 0;
 
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Data")
+	int32 Gold = 0;
+
 	UFUNCTION()
 	void CreateSkillShopWidget();
 
@@ -83,7 +86,7 @@ public:
 	void BindPlayerInfo();
 
 	UFUNCTION()
-	void BindGameManagers();
+	void BindStatManagers();
 
 	UFUNCTION()
 	void AddSkillDataToSkillManager(TArray<class ASkillBase*>& SkillDatas);
@@ -104,11 +107,6 @@ public:
 	void OnUpdateMySkillLevel_Implementation(const TArray<class ASkillBase*>& SkillDatas);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void OnUpdateMyPlayerStat(const TArray<class AStatEnhancementObjectBase*>& objDatas);
-
-	void OnUpdateMyPlayerStat_Implementation(const TArray<class AStatEnhancementObjectBase*>& objDatas);
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void OnUpdateMyMaxHp(float CurHp, float MaxHp);
 
 	void OnUpdateMyMaxHp_Implementation(float CurHp, float MaxHp);
@@ -127,6 +125,11 @@ public:
 	void OnUpdateMyPower(float Power);
 
 	void OnUpdateMyPower_Implementation(float Power);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnUpdateMyGold(int32 coin);
+
+	void OnUpdateMyGold_Implementation(int32 coin);
 
 
 	FTimerHandle th_BindMyStatManager;

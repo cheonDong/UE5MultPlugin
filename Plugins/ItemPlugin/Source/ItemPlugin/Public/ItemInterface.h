@@ -13,6 +13,7 @@ enum class EItemType : uint8
 	IT_RecoveryMp UMETA(DisplayName = "RecoveryMp"),
 	IT_SpeedUp UMETA(DisplayName = "SpeedUp"),
 	IT_PowerUp UMETA(DisplayName = "PowerUp"),
+	IT_Gold UMETA(DisplayName = "Gold"),
 };
 
 

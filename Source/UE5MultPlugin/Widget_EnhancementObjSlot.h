@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
-#include "EnhancementObjSlotWidgetBase.generated.h"
+#include "Widget_EnhancementObjSlot.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class ITEMPLUGIN_API UEnhancementObjSlotWidgetBase : public UUserWidget
+class UE5MULTPLUGIN_API UWidget_EnhancementObjSlot : public UUserWidget
 {
 	GENERATED_BODY()
 	
@@ -19,4 +19,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void EnhancementPlayerStat(class AStatEnhancementObjectBase* target);
+
+	UFUNCTION(BlueprintCallable)
+	bool IsCanBuyObj(class AStatEnhancementObjectBase* target);
 };
