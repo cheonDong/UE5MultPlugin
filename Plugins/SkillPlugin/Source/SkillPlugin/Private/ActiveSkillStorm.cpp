@@ -30,6 +30,12 @@ AActiveSkillStorm::AActiveSkillStorm()
 	SkillBody->SetRelativeScale3D(FVector(SkillSize, SkillSize, SkillSize));
 	SkillBody->SetRelativeLocation(FVector(0.0f, 0.0f, -200.0f));
 
+	static ConstructorHelpers::FObjectFinder<UParticleSystemComponent> ParticleAsset(TEXT("/Game/FXVarietyPack/Particles/P_ky_fireStorm.P_ky_fireStorm"));
+	if (ParticleAsset.Succeeded())
+	{
+		SkillBody = ParticleAsset.Object;
+	}
+
 	SkillMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("SkillMovement"));
 	SkillMovement->SetUpdatedComponent(SkillArea);
 

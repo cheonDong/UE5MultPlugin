@@ -39,6 +39,8 @@ public class ItemPlugin : ModuleRules
                 "UMG",
                 "Slate",
 				"SlateCore",
+                "OnlineSubsystem",
+                "OnlineSubsystemSteam",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

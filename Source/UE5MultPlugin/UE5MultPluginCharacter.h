@@ -42,7 +42,12 @@ class AUE5MultPluginCharacter : public ACharacter, public IItemInterface
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* Test;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* UseSkill;
+
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Component")
+	class UArrowComponent* MyArrow;
 
 public:
 	AUE5MultPluginCharacter();
@@ -57,6 +62,8 @@ protected:
 	void Look(const FInputActionValue& Value);
 	
 	void TestWidget(const FInputActionValue& Value);
+
+	void UsingSkill(const FInputActionValue& Value);
 
 protected:
 	// APawn interface
@@ -82,5 +89,11 @@ public:
 
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
 		class AController* EventInstigator, AActor* DamageCauser) override;
+
+	UFUNCTION()
+	void SpawnSkillActor();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class AActiveSkillStorm> LightningClass;
 };
 

@@ -9,10 +9,14 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "SkillManagementComponent.h"
 #include "StatManagementComponent.h"
 #include "MonsterStatComponent.h"
 #include "MyPlayerController.h"
-
+#include "Components/ArrowComponent.h"
+#include "ActiveSkillLightning.h"
+#include "ActiveSkillStorm.h"
+#include "Particles/ParticleSystemComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AUE5MultPluginCharacter
@@ -49,6 +53,10 @@ AUE5MultPluginCharacter::AUE5MultPluginCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+
+	MyArrow = CreateDefaultSubobject<UArrowComponent>(TEXT("MyArrow"));
+	MyArrow->SetupAttachment(RootComponent);
+	MyArrow->AddLocalOffset(FVector(0, 0, 100.0f));
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -145,6 +153,39 @@ float AUE5MultPluginCharacter::TakeDamage(float DamageAmount, FDamageEvent const
 	return 0.0f;
 }
 
+void AUE5MultPluginCharacter::SpawnSkillActor()
+{
+	AMyPlayerController* PC = Cast<AMyPlayerController>(GetController());
+
+	if (PC)
+	{
+		USkillManagementComponent* SkillManager = Cast<USkillManagementComponent>(PC->FindComponentByClass<USkillManagementComponent>());
+
+		if (SkillManager)
+		{
+			SkillManager->IsCanUseLightning();
+
+			FVector Location = MyArrow->GetComponentLocation();
+
+			FRotator Rotation = MyArrow->GetComponentRotation();
+
+			AActiveSkillStorm* lightning = GetWorld()->SpawnActor<AActiveSkillStorm>(Location, Rotation);
+
+			if (lightning)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("%s"), *lightning->SkillName);
+				lightning->SkillName = "Success Spawn";
+				UE_LOG(LogTemp, Warning, TEXT("%s"), *lightning->SkillName);
+				UParticleSystemComponent* ParticleComponent = lightning->FindComponentByClass<UParticleSystemComponent>();
+				if (ParticleComponent)
+				{
+					ParticleComponent->Activate();
+				}
+			}
+		}
+	}
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -164,6 +205,8 @@ void AUE5MultPluginCharacter::SetupPlayerInputComponent(class UInputComponent* P
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AUE5MultPluginCharacter::Look);
 
 		EnhancedInputComponent->BindAction(Test, ETriggerEvent::Started, this, &AUE5MultPluginCharacter::TestWidget);
+
+		EnhancedInputComponent->BindAction(UseSkill, ETriggerEvent::Started, this, &AUE5MultPluginCharacter::UsingSkill);
 
 	}
 
@@ -222,6 +265,11 @@ void AUE5MultPluginCharacter::TestWidget(const FInputActionValue& Value)
 			PlayerController->Test = 0;
 		}
 	}
+}
+
+void AUE5MultPluginCharacter::UsingSkill(const FInputActionValue& Value)
+{
+	SpawnSkillActor();
 }
 
 

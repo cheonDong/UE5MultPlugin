@@ -178,22 +178,16 @@ void USkillManagementComponent::GetSkill(ASkillBase* Skill)
 	}
 }
 
-bool USkillManagementComponent::IsCanUse(ASkillBase* Skill)
+bool USkillManagementComponent::IsCanUseLightning()
 {
-	if (Skill == nullptr)
-	{
-		return false;
-	}
-	
-	if (Skill->Level >= 1)
+	if(Storm > 0)
 	{
 		return true;
 	}
-
-	return false;
-
-	// 스킬 사용이 가능하며 해당 캐릭터의 애로우 컴포넌트에서 스킬을 스폰하는 함수를 캐릭터에서 실행
-
+	else
+	{
+		return false;
+	}	
 }
 
 void USkillManagementComponent::OnRep_SkillLevel()
@@ -202,5 +196,6 @@ void USkillManagementComponent::OnRep_SkillLevel()
 	if (Fuc_Dele_UpdateSkillLevel.IsBound())
 		Fuc_Dele_UpdateSkillLevel.Broadcast(SkillDatas);
 }
+
 
 

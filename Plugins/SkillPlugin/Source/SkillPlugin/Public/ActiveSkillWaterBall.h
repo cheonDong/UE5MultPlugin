@@ -29,6 +29,7 @@ public:
 
 	virtual void SkillLevelUp() override;
 
+
 	AActor* Target;
 
 	void ApplySkillDamage();

@@ -71,11 +71,12 @@ public:
 	void GetSkill(ASkillBase* Skill);
 
 	UFUNCTION()
-	bool IsCanUse(ASkillBase* Skill);
+	bool IsCanUseLightning();
 
 	UFUNCTION()
 	void OnRep_SkillLevel();
 
 	UPROPERTY(BlueprintAssignable, VisibleAnywhere, BlueprintCallable)
 	FDele_UpdateSkillLevel Fuc_Dele_UpdateSkillLevel;
+
 };
